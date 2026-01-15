@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken'
+import { env } from './env.js'
 
 export const generateToken = (userId, res) => {
-    const { JWT_SECRET } = process.env
+    const { JWT_SECRET } = env
     if (!JWT_SECRET) throw new Error('JWT_SECRET is not set')
     const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
         expiresIn: '14d',

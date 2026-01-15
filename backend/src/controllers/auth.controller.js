@@ -1,6 +1,7 @@
 import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
 import { generateToken } from '../lib/utils.js'
+import { sendWelcomeEmail } from '../emails/emailHandler.js'
 
 export const register = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -44,11 +45,19 @@ export const register = async (req, res) => {
                 firstName: newUser.firstName,
                 lastName: newUser.lastName
             })
+
+            const { CLIENT_URL } = process.env
+
+            try {
+                await sendWelcomeEmail(savedUser, firstName, CLIENT_URL)
+            } catch (error) {
+                console.error('Failed to send welcome email: ', error)
+            }
         } else {
-            res.status(400).json({ message: 'Invalid user data'})
+            res.status(400).json({ message: 'Invalid user data' })
         }
     } catch (error) {
         console.error('Error in register controller: ', error)
-        res.status(500).json({ message: 'Internal server error'})
+        res.status(500).json({ message: 'Internal server error' })
     }
 }
