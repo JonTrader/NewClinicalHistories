@@ -1,0 +1,25 @@
+{
+  "name": "newclinicalhistories",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines" : {
+    "node": ">20.0.0"
+  },
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonTrader/NewClinicalHistories.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JonTrader/NewClinicalHistories/issues"
+  },
+  "homepage": "https://github.com/JonTrader/NewClinicalHistories#readme"
+}
