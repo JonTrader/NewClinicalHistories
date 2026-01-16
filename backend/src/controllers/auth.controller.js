@@ -39,25 +39,60 @@ export const register = async (req, res) => {
             const savedUser = await newUser.save()
             generateToken(savedUser._id, res)
 
-            res.status(201).json({
-                _id: newUser._id,
-                email: newUser.email,
-                firstName: newUser.firstName,
-                lastName: newUser.lastName
-            })
-
             const { CLIENT_URL } = process.env
-
             try {
                 await sendWelcomeEmail(savedUser, firstName, CLIENT_URL)
             } catch (error) {
                 console.error('Failed to send welcome email: ', error)
             }
+
+            return res.status(201).json({
+                _id: newUser._id,
+                email: newUser.email,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName
+            })
         } else {
-            res.status(400).json({ message: 'Invalid user data' })
+            return res.status(400).json({ message: 'Invalid user data' })
         }
     } catch (error) {
         console.error('Error in register controller: ', error)
-        res.status(500).json({ message: 'Internal server error' })
+        return res.status(500).json({ message: 'Internal server error' })
     }
+}
+
+export const login = async (req, res) => {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' })
+    }
+
+    try {
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid credentials' }) // never tell user if email or password is invalid
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid credentials' }) // never tell user if email or password is invalid
+        }
+
+        generateToken(user._id, res)
+
+        return res.status(200).json({
+            _id: user._id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName
+        })
+    } catch (error) {
+        console.error('Error in login controller: ', error)
+    }
+}
+
+export const logout = async () => {
+    res.cookie('jwt', '', { maxAge: 0})
+    return res.status(200).json({ message: 'Logged out successfully'})
 }
