@@ -1,0 +1,98 @@
+import User from '../models/user.js'
+import bcrypt from 'bcryptjs'
+import { generateToken } from '../lib/utils.js'
+import { sendWelcomeEmail } from '../emails/emailHandler.js'
+
+export const register = async (req, res) => {
+    const { firstName, lastName, email, password } = req.body;
+
+    try {
+        if (!firstName || !lastName || !email || !password) {
+            return res.status(400).json({ message: 'All fields are required' })
+        }
+        if (password.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters' })
+        }
+
+        // checks if email is valid: regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format' })
+        }
+
+        // now we find email in database
+        const user = await User.findOne({ email })
+        if (user) return res.status(400).json({ message: 'Email already exists' })
+
+        // now we encrypt password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        const newUser = new User({
+            email,
+            password: hashedPassword,
+            firstName,
+            lastName
+        })
+        if (newUser) {
+            // save user first, then issue auth cookie
+            const savedUser = await newUser.save()
+            generateToken(savedUser._id, res)
+
+            const { CLIENT_URL } = process.env
+            try {
+                await sendWelcomeEmail(savedUser, firstName, CLIENT_URL)
+            } catch (error) {
+                console.error('Failed to send welcome email: ', error)
+            }
+
+            return res.status(201).json({
+                _id: newUser._id,
+                email: newUser.email,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName
+            })
+        } else {
+            return res.status(400).json({ message: 'Invalid user data' })
+        }
+    } catch (error) {
+        console.error('Error in register controller: ', error)
+        return res.status(500).json({ message: 'Internal server error' })
+    }
+}
+
+export const login = async (req, res) => {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' })
+    }
+
+    try {
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid credentials' }) // never tell user if email or password is invalid
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid credentials' }) // never tell user if email or password is invalid
+        }
+
+        generateToken(user._id, res)
+
+        return res.status(200).json({
+            _id: user._id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName
+        })
+    } catch (error) {
+        console.error('Error in login controller: ', error)
+    }
+}
+
+export const logout = async () => {
+    res.cookie('jwt', '', { maxAge: 0})
+    return res.status(200).json({ message: 'Logged out successfully'})
+}
