@@ -1,6 +1,7 @@
 import express from 'express'
 import path from 'path'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import { env } from './lib/env.js'
 import { connectToDatabase } from './lib/db.js'
 import authRoutes from './routes/auth.route.js'
@@ -13,6 +14,10 @@ const PORT = env.PORT || 3000;
 
 app.use(express.json()) // req.body
 app.use(cookieParser())
+app.use(cors({
+    origin: env.CLIENT_URL,
+    credentials: true
+}))
 
 app.use('/auth', authRoutes)
 app.use('/patient', patientRoutes)
