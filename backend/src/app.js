@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import { env } from './lib/env.js'
 import { connectToDatabase } from './lib/db.js'
 import authRoutes from './routes/auth.route.js'
+import patientRoutes from './routes/patient.route.js'
 
 
 const app = express()
@@ -14,6 +15,7 @@ app.use(express.json()) // req.body
 app.use(cookieParser())
 
 app.use('/auth', authRoutes)
+app.use('/patient', patientRoutes)
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
