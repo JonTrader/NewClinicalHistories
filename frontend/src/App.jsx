@@ -5,21 +5,31 @@ import PatientDetails from './pages/PatientDetails.jsx'
 import Patients from './pages/Patients.jsx'
 import Odontogram from './pages/Odontogram.jsx'
 import Evolution from './pages/Evolution.jsx'
-// import { useAuthStore } from './store/AuthStore.jsx'
+import { useAuthStore } from './store/AuthStore.jsx'
+import { useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
 
+  const { checkAuth, isCheckingAuth, authUser } = useAuthStore()
+
+  useEffect( () => {
+    checkAuth()
+  }, [checkAuth])
+
+  // if (isCheckingAuth) return <PageLoader />
   return (
     <div className='min-h-screen bg-slate-900 relative flex items-center justify-center p-4 overflow-hidden'>
       <Routes>
-        <Route path="/" element={<Patients />} />
+        <Route path="/" element={authUser ? <Patients /> : <Navigate to='/login' />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/details/:id" element={<PatientDetails />} />
-        <Route path="/odontogram/:id" element={<Odontogram />} />
-        <Route path="/evolution/:id" element={<Evolution />} />
+        <Route path="/details/:id" element={authUser ? <PatientDetails /> : <Navigate to='/login' />} />
+        <Route path="/odontogram/:id" element={authUser ? <Odontogram /> : <Navigate to='/login' />} />
+        <Route path="/evolution/:id" element={authUser ? <Evolution /> : <Navigate to='/login' />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
+      <Toaster />
     </div>
   )
 }
