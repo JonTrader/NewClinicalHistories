@@ -30,7 +30,7 @@ export const createPatient = async (req, res) => {
 export const editPatient = async (req, res) => {
     try {
         const { id } = req.params;
-        const patient = await Patient.findByIdAndUpdate(id, ...req.body)
+        const patient = await Patient.findByIdAndUpdate(id, {...req.body})
         return res.status(200).json(patient)
     } catch (error) {
         console.error('Error in editPatient controller: ', error)
