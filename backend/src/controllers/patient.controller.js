@@ -1,5 +1,4 @@
 import Patient from "../models/patient.js";
-import User from "../models/user.js";
 
 export const getAllPatients = async (req, res) => {
     try {
@@ -16,6 +15,10 @@ export const getAllPatients = async (req, res) => {
 export const createPatient = async (req, res) => {
     try {
         const userId = req.user._id
+        const { firstName, lastName } = req.body
+        if (!firstName || !lastName) {
+            return res.status(400).json({ message: 'First name and last name is required' })
+        }
         const newPatient = new Patient(req.body)
         newPatient.doctor = userId
 
@@ -30,7 +33,10 @@ export const createPatient = async (req, res) => {
 export const editPatient = async (req, res) => {
     try {
         const { id } = req.params;
-        const patient = await Patient.findByIdAndUpdate(id, {...req.body})
+        if (!id) {
+            return res.status(400).json({ message: 'No patient id found for updating' })
+        }
+        const patient = await Patient.findByIdAndUpdate(id, { ...req.body })
         return res.status(200).json(patient)
     } catch (error) {
         console.error('Error in editPatient controller: ', error)
@@ -42,6 +48,9 @@ export const editPatient = async (req, res) => {
 export const deletePatient = async (req, res) => {
     try {
         const { id } = req.params
+        if (!id) {
+            return res.status(400).json({ message: 'No patient id found for deletion' })
+        }
         await Patient.findByIdAndDelete(id);
         return res.status(200).json({ message: 'Patient has been deleted' })
     } catch (error) {
