@@ -1,10 +1,8 @@
 import express from 'express'
 import path from 'path'
+import cookieParser from 'cookie-parser'
 import { env } from './lib/env.js'
-
 import { connectToDatabase } from './lib/db.js'
-
-
 import authRoutes from './routes/auth.route.js'
 
 
@@ -12,7 +10,8 @@ const app = express()
 const __dirname = path.resolve();
 const PORT = env.PORT || 3000;
 
-app.use(express.json) // req.body
+app.use(express.json()) // req.body
+app.use(cookieParser())
 
 app.use('/auth', authRoutes)
 
@@ -24,7 +23,15 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-    connectToDatabase()
+const start = async () => {
+    await connectToDatabase()
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`)
+    })
+}
+
+start().catch(error => {
+    console.error('Failed to start server: ', error)
+    process.exit(1)
 })
+
