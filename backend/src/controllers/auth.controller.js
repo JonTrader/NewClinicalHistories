@@ -41,7 +41,7 @@ export const register = async (req, res) => {
 
             const { CLIENT_URL } = process.env
             try {
-                await sendWelcomeEmail(savedUser, firstName, CLIENT_URL)
+                await sendWelcomeEmail(savedUser.email, firstName, CLIENT_URL)
             } catch (error) {
                 console.error('Failed to send welcome email: ', error)
             }
