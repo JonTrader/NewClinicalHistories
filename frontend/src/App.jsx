@@ -5,7 +5,7 @@ import PatientDetails from './pages/PatientDetails.jsx'
 import Patients from './pages/Patients.jsx'
 import Odontogram from './pages/Odontogram.jsx'
 import Evolution from './pages/Evolution.jsx'
-import { useAuthStore } from './store/AuthStore.jsx'
+import { useAuthStore } from './store/AuthStore.js'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 
