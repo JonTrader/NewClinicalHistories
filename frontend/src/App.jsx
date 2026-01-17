@@ -19,11 +19,11 @@ function App() {
 
   // if (isCheckingAuth) return <PageLoader />
   return (
-    <div className='min-h-screen bg-slate-900 relative flex items-center justify-center p-4 overflow-hidden'>
+    <div className='min-h-screen bg-[#283E63] relative flex items-center justify-center p-4 overflow-hidden'>
       <Routes>
         <Route path="/" element={authUser ? <Patients /> : <Navigate to='/login' />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={!authUser ? <Login /> : <Navigate to='/' />} />
+        <Route path="/register" element={!authUser ? <Register /> : <Navigate to='/' />} />
         <Route path="/details/:id" element={authUser ? <PatientDetails /> : <Navigate to='/login' />} />
         <Route path="/odontogram/:id" element={authUser ? <Odontogram /> : <Navigate to='/login' />} />
         <Route path="/evolution/:id" element={authUser ? <Evolution /> : <Navigate to='/login' />} />
