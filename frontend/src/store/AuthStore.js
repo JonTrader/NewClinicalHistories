@@ -12,7 +12,7 @@ export const useAuthStore = create((set) => ({
     checkAuth: async () => {
         set({ isCheckingAuth: true })
         try {
-            const res = await ax.get('/auth/check')
+            const res = await ax.get('/api/v1/auth/check')
             set({ authUser: res.data })
         } catch (error) {
             console.error('Error in authcheck: ', error)
@@ -25,7 +25,7 @@ export const useAuthStore = create((set) => ({
     register: async (data) => {
         set({ isRegistering: true })
         try {
-            const res = await ax.post('/auth/register', data)
+            const res = await ax.post('/api/v1/auth/register', data)
             set({ authUser: res.data })
             toast.success('Cuenta creada exitosamente')
         } catch (error) {
@@ -39,7 +39,7 @@ export const useAuthStore = create((set) => ({
     login: async (data) => {
         set({ isLoggingIn: true })
         try {
-            const res = await ax.post('/auth/login', data)
+            const res = await ax.post('/api/v1/auth/login', data)
             set({ authUser: res.data })
             toast.success('Login exitoso')
         } catch (error) {
@@ -53,7 +53,7 @@ export const useAuthStore = create((set) => ({
     logout: async () => {
         set({ isLoggingOut: true })
         try {
-            await ax.post('/auth/logout')
+            await ax.post('/api/v1/auth/logout')
             set({ authUser: null })
             toast.success('Log out exitoso')
         } catch (error) {

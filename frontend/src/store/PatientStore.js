@@ -10,7 +10,7 @@ export const usePatientStore = create((set) => ({
     getAllPatients: async () => {
         set({ isPatientsLoading: true })
         try {
-            const res = await ax.get('/patient/allPatients')
+            const res = await ax.get('/api/v1/patients')
             console.log(res)
             set({ patients: res.data })
         } catch (error) {
@@ -24,7 +24,7 @@ export const usePatientStore = create((set) => ({
     createPatient: async (data) => {
         set({ isCreatingPatient: true })
         try {
-            const res = await ax.post('/patient/createPatient', data)
+            const res = await ax.post('/api/v1/patients', data)
             console.log(res)
             toast.success('Patient created successfully')
         } catch (error) {
