@@ -18,7 +18,7 @@ function Login() {
 
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='flex justify-center items-center h-screen'>
       <fieldset className="fieldset bg-[#1E232B] border-base-800 text-[#E0C6AB] rounded-box w-sm border p-10">
         <legend className="fieldset-legend text-[#E0C6AB]">Login</legend>
 
