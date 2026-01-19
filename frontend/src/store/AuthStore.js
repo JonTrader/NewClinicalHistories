@@ -6,6 +6,8 @@ export const useAuthStore = create((set) => ({
     authUser: null,
     isCheckingAuth: false,
     isRegistering: false,
+    isLoggingIn: false,
+    isLoggingOut: false,
 
     checkAuth: async () => {
         set({ isCheckingAuth: true })
@@ -31,6 +33,34 @@ export const useAuthStore = create((set) => ({
             toast.error(error.response?.data?.message)
         } finally {
             set({ isRegistering: false })
+        }
+    },
+
+    login: async (data) => {
+        set({ isLoggingIn: true })
+        try {
+            const res = await ax.post('/auth/login', data)
+            set({ authUser: res.data })
+            toast.success('Login exitoso')
+        } catch (error) {
+            console.error('Error in logging in: ', error)
+            toast.error(error.response?.data?.message)
+        } finally {
+            set({ isLoggingIn: false })
+        }
+    },
+
+    logout: async () => {
+        set({ isLoggingOut: true })
+        try {
+            await ax.post('/auth/logout')
+            set({ authUser: null })
+            toast.success('Log out exitoso')
+        } catch (error) {
+            console.error('Error in logging out: ', error)
+            toast.error(error.response?.data?.message)
+        } finally {
+            set({ isLoggingOut: false })
         }
     }
 }))
