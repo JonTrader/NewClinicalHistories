@@ -5,19 +5,15 @@ import { arcjetProtection } from '../middleware/arcjet.middleware.js'
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-    res.send('Patients route')
-})
-
 // middlewares execute in order
 // ideally rate-limit middleware executes first, then auth middleware
 // no reason to auth check then to have route be blocked by rate-limit
 
 router.use(arcjetProtection, protectRoute)
 
-router.get('/allPatients', getAllPatients)
-router.post('/createPatient', createPatient)
-router.put('/editPatient/:id', editPatient)
-router.delete('/deletePatient/:id', deletePatient)
+router.get('/', getAllPatients)
+router.post('/', createPatient)
+router.put('/:id', editPatient)
+router.delete('/:id', deletePatient)
 
 export default router

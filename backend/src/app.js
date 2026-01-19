@@ -19,8 +19,8 @@ app.use(cors({
     credentials: true
 }))
 
-app.use('/auth', authRoutes)
-app.use('/patient', patientRoutes)
+app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/patients', patientRoutes)
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
