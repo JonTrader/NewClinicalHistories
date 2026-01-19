@@ -14,7 +14,6 @@ router.use(arcjetProtection)
 router.post('/register', register)
 router.post('/login', login)
 router.post('/logout', logout)
-
 router.get('/check', protectRoute, (req, res) => res.status(200).json(req.user))
 
 export default router
