@@ -5,6 +5,7 @@ import PatientDetails from './pages/PatientDetails.jsx'
 import Patients from './pages/Patients.jsx'
 import Odontogram from './pages/Odontogram.jsx'
 import Evolution from './pages/Evolution.jsx'
+import PageLoader from './components/PageLoader.jsx'
 import { useAuthStore } from './store/AuthStore.js'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
@@ -17,7 +18,7 @@ function App() {
     checkAuth()
   }, [checkAuth])
 
-  // if (isCheckingAuth) return <PageLoader />
+  if (isCheckingAuth) return <PageLoader />
   return (
     <div className='min-h-screen bg-[#283E63] relative flex items-center justify-center p-4 overflow-hidden'>
       <Routes>
