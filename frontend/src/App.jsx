@@ -20,7 +20,7 @@ function App() {
 
   if (isCheckingAuth) return <PageLoader />
   return (
-    <div className='min-h-screen bg-[#283E63] relative flex items-center justify-center p-4 overflow-hidden'>
+    <div className='min-h-screen bg-[#283E63] relative'>
       <Routes>
         <Route path="/" element={authUser ? <Patients /> : <Navigate to='/login' />} />
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to='/' />} />
