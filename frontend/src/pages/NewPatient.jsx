@@ -135,7 +135,7 @@ function NewPatient() {
         <div className='mb-4 mt-16 text-center text-[#E0C6AB]'>
           <h2 className='text-2xl'>Contacto de Emergencia</h2>
         </div>
-        <div className='gap-6 text-[#E0C6AB] justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+        <div className='gap-6 text-[#E0C6AB] justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
           <fieldset className="fieldset w-3/4">
             <p className="label">Nombre Completo</p>
             <input type="text" className="input input-sm" onChange={(e) => setFormData({...formData, emergencyContactName: e.target.value})}/>

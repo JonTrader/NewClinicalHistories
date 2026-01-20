@@ -27,7 +27,7 @@ function Patients() {
         <tbody>
           {patients.map((patient) => {
             return (
-            <tr>
+            <tr key={patient._id}>
               <th>{`${patient.firstName} ${patient.lastName}`}</th>
               <td>{patient.identification?.idNumber || ''}</td>
               <td>Ver/Editar</td>
