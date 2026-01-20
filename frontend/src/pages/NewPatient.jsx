@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { usePatientStore } from '../store/PatientStore.jsx'
+import { usePatientStore } from '../store/PatientStore.js'
 import { LoaderIcon } from 'react-hot-toast'
 
 function NewPatient() {

@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 export const useAuthStore = create((set) => ({
     authUser: null,
-    isCheckingAuth: false,
+    isCheckingAuth: true,
     isRegistering: false,
     isLoggingIn: false,
     isLoggingOut: false,
