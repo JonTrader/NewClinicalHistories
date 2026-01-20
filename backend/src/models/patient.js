@@ -11,29 +11,20 @@ const PatientSchema = new mongoose.Schema({
     },
     dob: String,
     birthPlace: String,
-    identification:
-    {
-        idType: String,
-        idNumber: Number
-    },
+    idType: String,
+    idNumber: Number,
     gender: String,
     civilStatus: String,
     motive: String,
     bloodType: String,
-    eps:
-    {
-        name: String,
-        epsType: String
-    },
+    epsName: String,
+    epsType: String,
     contactNumber: String,
     address: String,
     email: String,
-    emergencyContact:
-    {
-        name: String,
-        contactNumber: Number,
-        relationship: String
-    },
+    emergencyContactName: String,
+    emergencyContactNumber: Number,
+    emergencyContactRelationship: String,
     doctor:
     {
         type: mongoose.Schema.Types.ObjectId,

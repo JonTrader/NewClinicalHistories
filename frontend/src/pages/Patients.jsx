@@ -26,14 +26,15 @@ function Patients() {
         </thead>
         <tbody>
           {patients.map((patient) => {
+            return (
             <tr>
               <th>{`${patient.firstName} ${patient.lastName}`}</th>
-              <td>{patient.identification.idNumber}</td>
+              <td>{patient.identification?.idNumber || ''}</td>
               <td>Ver/Editar</td>
               <td>Modificar</td>
               <td>Agregar</td>
             </tr>
-          })}
+          )})}
         </tbody>
       </table>
     </div>
