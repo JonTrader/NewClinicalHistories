@@ -3,6 +3,7 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import PatientDetails from './pages/PatientDetails.jsx'
 import Patients from './pages/Patients.jsx'
+import NewPatient from './pages/NewPatient.jsx'
 import Odontogram from './pages/Odontogram.jsx'
 import Evolution from './pages/Evolution.jsx'
 import PageLoader from './components/PageLoader.jsx'
@@ -22,7 +23,7 @@ function App() {
   return (
     <div className='min-h-screen bg-[#283E63] relative'>
       <Routes>
-        <Route path="/" element={authUser ? <Patients /> : <Navigate to='/login' />} />
+        <Route path="/" element={authUser ? <NewPatient /> : <Navigate to='/login' />} />
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to='/' />} />
         <Route path="/register" element={!authUser ? <Register /> : <Navigate to='/' />} />
         <Route path="/details/:id" element={authUser ? <PatientDetails /> : <Navigate to='/login' />} />
