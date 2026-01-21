@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 export const usePatientStore = create((set) => ({
     patients: [],
-    isPatientsLoading: false,
+    isPatientsLoading: true,
     isCreatingPatient: false,
 
     getAllPatients: async () => {
