@@ -6,7 +6,7 @@ function Navbar() {
     const { logout } = useAuthStore()
 
     return (
-        <div className="navbar bg-[#1E232B] shadow-sm">
+        <div className="navbar px-8 bg-[#1E232B] shadow-sm">
             <div className="navbar-start">
                 <Link to="/" className="font-serif text-[#E0C6AB] text-sm hover:cursor-pointer hover:scale-110 transition-all">Pacientes</Link>
             </div>
