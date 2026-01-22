@@ -36,7 +36,7 @@ export const editPatient = async (req, res) => {
         if (!id) {
             return res.status(400).json({ message: 'No patient id found for updating' })
         }
-        const patient = await Patient.findByIdAndUpdate(id, { ...req.body })
+        const patient = await Patient.findByIdAndUpdate(id, { ...req.body }, { new: true})
         return res.status(200).json(patient)
     } catch (error) {
         console.error('Error in editPatient controller: ', error)
@@ -56,5 +56,22 @@ export const deletePatient = async (req, res) => {
     } catch (error) {
         console.error('Error in deletePatient controller: ', error)
         return res.status(500).json({ message: 'Internal server error trying to deletePatient' })
+    }
+}
+
+export const getPatientDetails = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) {
+            return res.status(400).json({ message: 'No patient id found for editing/viewing' })
+        }
+        const patient = await Patient.findById(id)
+        if (!patient.doctor.equals(req.user._id)) {
+            return res.status(400).json({ message: 'You are not allowed to view/edit details' })
+        }
+        return res.status(200).json(patient)
+    } catch (error) {
+        console.error('Error in getDetails controller: ', error)
+        res.status(500).json({ message: 'Internal server errir trying to getPatientDetails' })
     }
 }

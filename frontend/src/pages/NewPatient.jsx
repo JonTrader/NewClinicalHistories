@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { usePatientStore } from '../store/PatientStore.js'
-import { LoaderIcon } from 'react-hot-toast'
+import { LoaderIcon } from 'lucide-react'
 import InputFieldset from '../components/InputFieldset.jsx'
 import InputSelect from '../components/InputSelect.jsx'
 import InputTextarea from '../components/InputTextarea.jsx'
@@ -8,7 +8,7 @@ import InputTextarea from '../components/InputTextarea.jsx'
 function NewPatient() {
   const [formData, setFormData] = useState({
     medicalHistoryQuestions: Array(22).fill('No refiere'),
-    dentalHistoryQuesitons: Array(2).fill('No refiere')
+    dentalHistoryQuestions: Array(2).fill('No refiere')
   })
   const { isCreatingPatient, createPatient } = usePatientStore()
 
@@ -23,7 +23,6 @@ function NewPatient() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(formData)
     createPatient(formData)
   }
 
@@ -38,18 +37,18 @@ function NewPatient() {
             <InputFieldset type={'email'} onChange={(e) => setFormData({ ...formData, email: e.target.value })} label={'Correo Electronico'} />
             <InputFieldset type={'tel'} onChange={(e) => setFormData({ ...formData, contactNumber: parseInt(e.target.value) })} label={'# de Telefono'} />
             <InputFieldset type="date" onChange={(e) => setFormData({ ...formData, dob: e.target.value })} label={'Fecha de Nacimiento'} />
-            <InputSelect label={'Sexo'} onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
+            <InputSelect value={formData.gender} label={'Sexo'} onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
               <option value="Hombre">Hombre</option>
               <option value="Mujer">Mujer</option>
             </InputSelect>
-            <InputSelect label={'Tipo de Identificacion'} onChange={(e) => setFormData({ ...formData, idType: e.target.value })}>
+            <InputSelect value={formData.idType} label={'Tipo de Identificacion'} onChange={(e) => setFormData({ ...formData, idType: e.target.value })}>
               <option value="C.C">C.C</option>
               <option value="C.I">C.I</option>
               <option value="C.I">C.E</option>
               <option value="Pasaporte">Pasaporte</option>
             </InputSelect>
             <InputFieldset type="tel" onChange={(e) => setFormData({ ...formData, idNumber: parseInt(e.target.value) })} label={'# de Identificacion'} />
-            <InputSelect label={'Estado Civil'} onChange={(e) => setFormData({ ...formData, civilStatus: e.target.value })}>
+            <InputSelect value={formData.civilStatus} label={'Estado Civil'} onChange={(e) => setFormData({ ...formData, civilStatus: e.target.value })}>
               <option value="Soltero">Soltero</option>
               <option value="Casado">Casado</option>
               <option value="Viudo">Viudo</option>
@@ -59,12 +58,12 @@ function NewPatient() {
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, address: e.target.value })} label={'Direccion'} />
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, birthPlace: e.target.value })} label={'Lugar de Nacimiento'} />
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, epsName: e.target.value })} label={'EPS'} />
-            <InputSelect label={'Tipo EPS:'} onChange={(e) => setFormData({ ...formData, epsType: e.target.value })}>
+            <InputSelect value={formData.epsType} label={'Tipo EPS:'} onChange={(e) => setFormData({ ...formData, epsType: e.target.value })}>
               <option>Contributivo</option>
               <option>Subsidiado</option>
               <option>Beneficiario</option>
             </InputSelect>
-            <InputSelect label={'Tipo de Sangre'} onChange={(e) => setFormData({ ...formData, bloodType: e.target.value })}>
+            <InputSelect value={formData.bloodType} label={'Tipo de Sangre'} onChange={(e) => setFormData({ ...formData, bloodType: e.target.value })}>
               <option>A+</option>
               <option>A-</option>
               <option>B+</option>
@@ -120,8 +119,8 @@ function NewPatient() {
         <div className='mt-16 text-center'>
           <h2 className='text-2xl'>Antecedentes Odontologicos</h2>
           <div className=' mt-2 justify-items-center grid grid-cols-1 md:grid-cols-2'>
-            <InputTextarea size={"lg:w-80 xl:w-125 w-80 sm:w-96 md:w-65"} label={'1. Anestesia local? Reaccion?'} text={formData.dentalHistoryQuesitons[0]} onChange={(e) => updateArray('dentalHistoryQuestions', 0, e.target.value)} />
-            <InputTextarea size={"lg:w-80 xl:w-125 w-80 sm:w-96 md:w-65"} label={'2. Ultima visita al Odontologo? Tratamiento?'} text={formData.dentalHistoryQuesitons[1]} onChange={(e) => updateArray('dentalHistoryQuestions', 1, e.target.value)} />
+            <InputTextarea size={"lg:w-80 xl:w-125 w-80 sm:w-96 md:w-65"} label={'1. Anestesia local? Reaccion?'} text={formData.dentalHistoryQuestions[0]} onChange={(e) => updateArray('dentalHistoryQuestions', 0, e.target.value)} />
+            <InputTextarea size={"lg:w-80 xl:w-125 w-80 sm:w-96 md:w-65"} label={'2. Ultima visita al Odontologo? Tratamiento?'} text={formData.dentalHistoryQuestions[1]} onChange={(e) => updateArray('dentalHistoryQuestions', 1, e.target.value)} />
           </div>
         </div>
         <div className='py-10 text-center'>
@@ -129,9 +128,7 @@ function NewPatient() {
             <button className='btn btn-md w-35 text-xs'>{isCreatingPatient ? <LoaderIcon /> : 'Crear Paciente'}</button>
           </div>
         </div>
-
       </div>
-
     </form>
   )
 }
