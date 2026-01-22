@@ -57,7 +57,7 @@ export const usePatientStore = create((set) => ({
             console.error('Error in editing patient: ', error)
             toast.error(error.response?.data?.message)
         } finally {
-            set({ isEditingLoading: false })
+            set({ isEditingPatient: false })
         }
     }
 }))

@@ -37,18 +37,18 @@ function NewPatient() {
             <InputFieldset type={'email'} onChange={(e) => setFormData({ ...formData, email: e.target.value })} label={'Correo Electronico'} />
             <InputFieldset type={'tel'} onChange={(e) => setFormData({ ...formData, contactNumber: parseInt(e.target.value) })} label={'# de Telefono'} />
             <InputFieldset type="date" onChange={(e) => setFormData({ ...formData, dob: e.target.value })} label={'Fecha de Nacimiento'} />
-            <InputSelect label={'Sexo'} onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
+            <InputSelect value={formData.gender} label={'Sexo'} onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
               <option value="Hombre">Hombre</option>
               <option value="Mujer">Mujer</option>
             </InputSelect>
-            <InputSelect label={'Tipo de Identificacion'} onChange={(e) => setFormData({ ...formData, idType: e.target.value })}>
+            <InputSelect value={formData.idType} label={'Tipo de Identificacion'} onChange={(e) => setFormData({ ...formData, idType: e.target.value })}>
               <option value="C.C">C.C</option>
               <option value="C.I">C.I</option>
               <option value="C.I">C.E</option>
               <option value="Pasaporte">Pasaporte</option>
             </InputSelect>
             <InputFieldset type="tel" onChange={(e) => setFormData({ ...formData, idNumber: parseInt(e.target.value) })} label={'# de Identificacion'} />
-            <InputSelect label={'Estado Civil'} onChange={(e) => setFormData({ ...formData, civilStatus: e.target.value })}>
+            <InputSelect value={formData.civilStatus} label={'Estado Civil'} onChange={(e) => setFormData({ ...formData, civilStatus: e.target.value })}>
               <option value="Soltero">Soltero</option>
               <option value="Casado">Casado</option>
               <option value="Viudo">Viudo</option>
@@ -58,12 +58,12 @@ function NewPatient() {
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, address: e.target.value })} label={'Direccion'} />
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, birthPlace: e.target.value })} label={'Lugar de Nacimiento'} />
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, epsName: e.target.value })} label={'EPS'} />
-            <InputSelect label={'Tipo EPS:'} onChange={(e) => setFormData({ ...formData, epsType: e.target.value })}>
+            <InputSelect value={formData.epsType} label={'Tipo EPS:'} onChange={(e) => setFormData({ ...formData, epsType: e.target.value })}>
               <option>Contributivo</option>
               <option>Subsidiado</option>
               <option>Beneficiario</option>
             </InputSelect>
-            <InputSelect label={'Tipo de Sangre'} onChange={(e) => setFormData({ ...formData, bloodType: e.target.value })}>
+            <InputSelect value={formData.bloodType} label={'Tipo de Sangre'} onChange={(e) => setFormData({ ...formData, bloodType: e.target.value })}>
               <option>A+</option>
               <option>A-</option>
               <option>B+</option>

@@ -1,9 +1,10 @@
-function InputSelect({ label, onChange, children, disabled=false}) {
+function InputSelect({ label, onChange, children, value='Seleccione', disabled = false }) {
+    console.log(value)
     return (
-        < fieldset className="fieldset w-3/4" >
+        <fieldset className="fieldset w-3/4" >
             <p className="label">{label}</p>
-            <select disabled={disabled} defaultValue="Seleccione" className="select input-sm" onChange={onChange}>
-                <option disabled={true}>Seleccione</option>
+            <select value={value} disabled={disabled} className="select input-sm" onChange={onChange}>
+                <option disabled>Seleccione</option>
                 {children}
             </select>
         </fieldset >
