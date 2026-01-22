@@ -1,5 +1,4 @@
 function InputSelect({ label, onChange, children, value='Seleccione', disabled = false }) {
-    console.log(value)
     return (
         <fieldset className="fieldset w-3/4" >
             <p className="label">{label}</p>

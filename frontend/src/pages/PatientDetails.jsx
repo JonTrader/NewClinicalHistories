@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import { usePatientStore } from '../store/PatientStore.js'
 import { LoaderIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -16,6 +16,7 @@ function PatientDetails() {
   const { updatePatient, isEditingPatient } = usePatientStore()
 
   const { id } = useParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchPatient = async (id) => {
@@ -44,6 +45,7 @@ function PatientDetails() {
   const handleSubmit = (e) => {
     e.preventDefault()
     updatePatient(id, formData)
+    navigate('/')
   }
 
   if (isLoading) return <PageLoader />
@@ -151,7 +153,7 @@ function PatientDetails() {
           </div>
           <div className='py-10 text-center'>
             <div className=' mt-4 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              <button className='btn btn-md w-35 text-xs'>{isEditingPatient ? <LoaderIcon /> : 'Modificar Paciente'}</button>
+              <button className='btn btn-md w-35 text-xs'>{isEditingPatient ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Modificar Paciente'}</button>
             </div>
           </div>
         </div>

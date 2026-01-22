@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 import { usePatientStore } from '../store/PatientStore.js'
 import { LoaderIcon } from 'lucide-react'
 import InputFieldset from '../components/InputFieldset.jsx'
@@ -11,6 +12,7 @@ function NewPatient() {
     dentalHistoryQuestions: Array(2).fill('No refiere')
   })
   const { isCreatingPatient, createPatient } = usePatientStore()
+  const navigate = useNavigate()
 
   // helper function to update array
   const updateArray = (keyName, index, value) => {
@@ -24,6 +26,7 @@ function NewPatient() {
   const handleSubmit = (e) => {
     e.preventDefault()
     createPatient(formData)
+    navigate('/')
   }
 
   return (
@@ -125,7 +128,7 @@ function NewPatient() {
         </div>
         <div className='py-10 text-center'>
           <div className=' mt-4 justify-items-center sm:justify-items-center grid grid-cols-1'>
-            <button className='btn btn-md w-35 text-xs'>{isCreatingPatient ? <LoaderIcon /> : 'Crear Paciente'}</button>
+            <button className='btn btn-md w-35 text-xs'>{isCreatingPatient ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Crear Paciente'}</button>
           </div>
         </div>
       </div>
