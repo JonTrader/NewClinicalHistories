@@ -53,7 +53,7 @@ function PatientDetails() {
   return (
     <>
       <div className='py-4 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        <button onClick={() => setIsEditing(!isEditing)} className='btn btn-md'>{isEditing ? 'Ver' : 'Modifica'} Paciente</button>
+        <button onClick={() => setIsEditing( wasEditing => !wasEditing)} className='btn btn-md'>{isEditing ? 'Ver' : 'Modifica'} Paciente</button>
       </div>
       <form action="" onSubmit={handleSubmit} className='font-serif text-[#E0C6AB]'>
         <div className='p-6 md:p-20'>

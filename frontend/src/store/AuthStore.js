@@ -64,3 +64,27 @@ export const useAuthStore = create((set) => ({
         }
     }
 }))
+
+
+// Set up axios interceptor to handle 401 errors globally
+// This ensures auth state is cleared when token is invalid/missing
+ax.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        // Only handle 401 errors for non-auth endpoints
+        // Auth endpoints (login, register, logout, check) handle their own errors
+        if (error.response?.status === 401) {
+            const url = error.config?.url || ''
+            const isAuthEndpoint = url.includes('/api/v1/auth/')
+            
+            if (!isAuthEndpoint) {
+                // Clear auth state to trigger redirect
+                const currentAuthUser = useAuthStore.getState().authUser
+                if (currentAuthUser) {
+                    useAuthStore.setState({ authUser: null })
+                }
+            }
+        }
+        return Promise.reject(error)
+    }
+)
