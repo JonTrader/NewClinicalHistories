@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, Outlet } from 'react-router'
+import { Routes, Route, Navigate, Outlet, useNavigate, useLocation } from 'react-router'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import PatientDetails from './pages/PatientDetails.jsx'
@@ -8,6 +8,7 @@ import Odontogram from './pages/Odontogram.jsx'
 import Evolution from './pages/Evolution.jsx'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 import PageLoader from './components/PageLoader.jsx'
 import { useAuthStore } from './store/AuthStore.js'
 import { useEffect } from 'react'
@@ -24,23 +25,33 @@ const MainLayout = () => (
 function App() {
 
   const { checkAuth, isCheckingAuth, authUser } = useAuthStore()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
 
+  useEffect(() => {
+    if(!isCheckingAuth && !authUser && location.pathname !== '/login' && location.pathname !== '/register') {
+      navigate('/login', { state: { from: location } })
+    }
+  }, [isCheckingAuth, authUser, navigate, location])
+
   if (isCheckingAuth) return <PageLoader />
   return (
     <div className='min-h-screen bg-[#283E63] relative'>
       <Routes>
-        <Route path="/login" element={!authUser ? <Login /> : <Navigate to='/' />} />
-        <Route path="/register" element={!authUser ? <Register /> : <Navigate to='/' />} />
+        <Route path="/login" element={!authUser ? <Login /> : <Navigate to='/' replace/>} />
+        <Route path="/register" element={!authUser ? <Register /> : <Navigate to='/' replace/>} />
         <Route element={<MainLayout />}>
-          <Route path="/" element={authUser ? <Patients /> : <Navigate to='/login' />} />
-          <Route path="/new" element={authUser ? <NewPatient /> : <Navigate to='/login' />} />
-          <Route path="/details/:id" element={authUser ? <PatientDetails /> : <Navigate to='/login' />} />
-          <Route path="/odontogram/:id" element={authUser ? <Odontogram /> : <Navigate to='/login' />} />
-          <Route path="/evolution/:id" element={authUser ? <Evolution /> : <Navigate to='/login' />} />
+          <Route element={<ProtectedRoute user={authUser} />}>
+            <Route path="/" element={<Patients />} />
+            <Route path="/new" element={<NewPatient />} />
+            <Route path="/details/:id" element={<PatientDetails />} />
+            <Route path="/odontogram/:id" element={<Odontogram />} />
+            <Route path="/evolution/:id" element={<Evolution />} />
+          </Route>
         </Route>
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
