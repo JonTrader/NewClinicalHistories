@@ -1,6 +1,7 @@
 import Patient from "../models/patient.js";
 import Odontogram from "../models/odontogram.js";
-import tooth from '../lib/odontogramHelper.js'
+import Evolution from "../models/evolution.js";
+import teeth from '../lib/odontogramHelper.js'
 
 export const getAllPatients = async (req, res) => {
     try {
@@ -23,12 +24,19 @@ export const createPatient = async (req, res) => {
         }
         const newPatient = new Patient(req.body)
         const newOdontogram = new Odontogram()
-        newPatient.doctor = userId
-        newPatient.odontogram = newOdontogram
-        newOdontogram.teeth = tooth
+        const newEvolution = new Evolution()
 
-        await newOdontogram.save()
+        newPatient.doctor = userId
+
+        newPatient.odontogram = newOdontogram
+        newOdontogram.teeth = teeth
+
+        newPatient.evolution = newEvolution
+        newEvolution.update.push({ body: 'Paciente ha sido creado.'})
+
         await newPatient.save()
+        await newOdontogram.save()
+        await newEvolution.save()
         return res.status(201).json(newPatient)
     } catch (error) {
         console.error('Error in createPatient controller: ', error)
