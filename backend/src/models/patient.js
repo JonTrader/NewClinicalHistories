@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import Odontogram from './odontogram.js'
+import Evolution from './evolution.js'
 
 const PatientSchema = new mongoose.Schema({
     firstName: {
@@ -31,14 +33,13 @@ const PatientSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    evolution: [{
+    evolution: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Evolution'
-    }],
+    },
     odontogram: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Odontogram',
-
     }
 }, { timestamps: true })
 

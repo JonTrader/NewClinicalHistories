@@ -1,4 +1,4 @@
-const tooth = [{
+const teeth = [{
     top: 'White',
     right: 'White',
     bottom: 'White',
@@ -256,4 +256,4 @@ const tooth = [{
     number: 48
 }]
 
-export default tooth
+export default teeth
