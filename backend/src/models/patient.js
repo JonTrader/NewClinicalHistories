@@ -25,13 +25,21 @@ const PatientSchema = new mongoose.Schema({
     emergencyContactName: String,
     emergencyContactNumber: Number,
     emergencyContactRelationship: String,
-    doctor:
-    {
+    medicalHistoryQuestions: [String],
+    dentalHistoryQuestions: [String],
+    doctor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    medicalHistoryQuestions: [String],
-    dentalHistoryQuestions: [String],
+    evolution: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Evolution'
+    }],
+    odontogram: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Odontogram',
+
+    }
 }, { timestamps: true })
 
 const Patient = mongoose.model('Patient', PatientSchema)

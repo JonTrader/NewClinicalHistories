@@ -1,0 +1,259 @@
+const tooth = [{
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 18
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 17
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 16
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 15
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 14
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 13
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 12
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 11
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 21
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 22
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 23
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 24
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 25
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 26
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 27
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 28
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 38
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 37
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 36
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 35
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 34
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 33
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 32
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 31
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 41
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 42
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 43
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 44
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 45
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 46
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 47
+}, {
+    top: 'White',
+    right: 'White',
+    bottom: 'White',
+    left: 'White',
+    center: 'White',
+    description: 'Sano',
+    number: 48
+}]
+
+export default tooth
