@@ -8,7 +8,12 @@ const UpdateSchema = new mongoose.Schema({
 }, { timestamps: true, _id: false })
 
 const EvolutionSchema = new mongoose.Schema({
-    update: [UpdateSchema]
+    update: [UpdateSchema],
+    patient: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Patient',
+        required: true
+    },
 })
 
 const Evolution = mongoose.model('Evolution', EvolutionSchema)

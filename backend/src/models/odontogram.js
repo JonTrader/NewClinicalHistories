@@ -14,7 +14,12 @@ const toothSchema = new mongoose.Schema({
 const OdontogramSchema = new mongoose.Schema({
     tejidosBlandos: [Boolean],
     problemas: [String],
-    teeth: [toothSchema]
+    teeth: [toothSchema],
+    patient: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Patient',
+        required: true
+    },
 })
 
 const Odontogram = mongoose.model('Odontogram', OdontogramSchema)

@@ -22,17 +22,23 @@ export const createPatient = async (req, res) => {
         if (!firstName || !lastName) {
             return res.status(400).json({ message: 'First name and last name is required' })
         }
-        const newPatient = new Patient(req.body)
-        const newOdontogram = new Odontogram()
-        const newEvolution = new Evolution()
-
-        newPatient.doctor = userId
-
-        newPatient.odontogram = newOdontogram
-        newOdontogram.teeth = teeth
-
-        newPatient.evolution = newEvolution
+        const newPatient = new Patient({...req.body, doctor: userId })
+        const newOdontogram = new Odontogram({
+            teeth,
+            patient: newPatient._id
+        })
+        const newEvolution = new Evolution({
+            patient: newPatient._id
+        })
         newEvolution.update.push({ body: 'Paciente ha sido creado.'})
+
+        // newPatient.doctor = userId
+
+        // newPatient.odontogram = newOdontogram
+        // newOdontogram.teeth = teeth
+
+        // newPatient.evolution = newEvolution
+        
 
         await newPatient.save()
         await newOdontogram.save()
