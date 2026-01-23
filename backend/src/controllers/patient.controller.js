@@ -1,4 +1,6 @@
 import Patient from "../models/patient.js";
+import Odontogram from "../models/odontogram.js";
+import tooth from '../lib/odontogramHelper.js'
 
 export const getAllPatients = async (req, res) => {
     try {
@@ -20,8 +22,12 @@ export const createPatient = async (req, res) => {
             return res.status(400).json({ message: 'First name and last name is required' })
         }
         const newPatient = new Patient(req.body)
+        const newOdontogram = new Odontogram()
         newPatient.doctor = userId
+        newPatient.odontogram = newOdontogram
+        newOdontogram.teeth = tooth
 
+        await newOdontogram.save()
         await newPatient.save()
         return res.status(201).json(newPatient)
     } catch (error) {
