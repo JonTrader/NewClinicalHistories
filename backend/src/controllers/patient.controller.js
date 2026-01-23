@@ -30,15 +30,7 @@ export const createPatient = async (req, res) => {
         const newEvolution = new Evolution({
             patient: newPatient._id
         })
-        newEvolution.update.push({ body: 'Paciente ha sido creado.'})
-
-        // newPatient.doctor = userId
-
-        // newPatient.odontogram = newOdontogram
-        // newOdontogram.teeth = teeth
-
-        // newPatient.evolution = newEvolution
-        
+        newEvolution.update.push({ body: 'Paciente ha sido creado.'}) 
 
         await newPatient.save()
         await newOdontogram.save()
