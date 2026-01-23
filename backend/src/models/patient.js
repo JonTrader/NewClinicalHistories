@@ -32,16 +32,19 @@ const PatientSchema = new mongoose.Schema({
     doctor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
-    evolution: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Evolution'
-    },
-    odontogram: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Odontogram',
     }
 }, { timestamps: true })
+
+PatientSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Odontogram.deleteOne({
+            patient: doc._id
+        })
+        await Evolution.deleteOne({
+            patient: doc._id
+        })
+    }
+})
 
 const Patient = mongoose.model('Patient', PatientSchema)
 

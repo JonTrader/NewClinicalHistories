@@ -8,6 +8,7 @@ export const usePatientStore = create((set) => ({
     isCreatingPatient: false,
     isDetailsLoading: true,
     isEditingPatient: false,
+    isDeletingPatient: false,
 
     getAllPatients: async () => {
         set({ isPatientsLoading: true })
@@ -58,6 +59,19 @@ export const usePatientStore = create((set) => ({
             toast.error(error.response?.data?.message)
         } finally {
             set({ isEditingPatient: false })
+        }
+    },
+
+    deletePatient: async (id) => {
+        set({ isDeletingPatient: true })
+        try {
+            await ax.delete(`/api/v1/patients/${id}`)
+            toast.success('Patient deleted')
+        } catch (error) {
+            console.error('Error in deleting patient: ', error)
+            toast.error(error.response?.data?.message)
+        } finally {
+            set({ isDeletingPatient: false })
         }
     }
 }))

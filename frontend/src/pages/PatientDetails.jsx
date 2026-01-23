@@ -13,7 +13,7 @@ function PatientDetails() {
   const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({})
   const [isEditing, setIsEditing] = useState(false)
-  const { updatePatient, isEditingPatient } = usePatientStore()
+  const { updatePatient, isEditingPatient, isDeletingPatient, deletePatient } = usePatientStore()
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -48,12 +48,20 @@ function PatientDetails() {
     navigate('/')
   }
 
+  const handleDelete = (e) => {
+    e.preventDefault()
+    deletePatient(id)
+    navigate('/')
+  }
+
   if (isLoading) return <PageLoader />
 
   return (
     <>
       <div className='py-4 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        <button onClick={() => setIsEditing( wasEditing => !wasEditing)} className='btn btn-md'>{isEditing ? 'Ver' : 'Modifica'} Paciente</button>
+        <button onClick={() => setIsEditing(wasEditing => !wasEditing)} className='btn btn-md'>{isEditing ? 'Ver' : 'Modifica'} Paciente</button>
+        <button onClick={handleDelete} className='btn btn-md w-35 text-xs'>{isDeletingPatient ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Borrar Paciente'}</button>
+
       </div>
       <form action="" onSubmit={handleSubmit} className='font-serif text-[#E0C6AB]'>
         <div className='p-6 md:p-20'>
