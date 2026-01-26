@@ -32,7 +32,7 @@ function Patients() {
               <th>{`${patient.firstName} ${patient.lastName}`}</th>
               <td>{patient?.idNumber || ''}</td>
               <td><Link to={`/details/${patient._id}`}>Ver/Editar</Link></td>
-              <td className='hidden sm:block'><Link>Modificar</Link></td>
+              <td className='hidden sm:block'><Link to={`/odontogram/${patient._id}`}>Modificar</Link></td>
               <td><Link to={`/evolution/${patient._id}`}>Agregar</Link></td>
             </tr>
           )})}

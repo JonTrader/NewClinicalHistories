@@ -9,7 +9,7 @@ import PageLoader from '../components/PageLoader.jsx'
 
 function Evolution() {
   const [isLoading, setIsLoading] = useState(true)
-  const [evolutionData, setEvolutionData] = useState('')
+  const [evolutionData, setEvolutionData] = useState([])
   const [formData, setFormData] = useState({ body: '' })
   const { isUpdatingEvolution, updateEvolution } = useEvolutionStore()
 
@@ -20,7 +20,7 @@ function Evolution() {
   useEffect(() => {
     const fetchEvolution = async (id) => {
       try {
-        const res = await ax.get(`/api/v1/patients/evolution/${id}`)
+        const res = await ax.get(`/api/v1/patients/${id}/evolution`)
         setEvolutionData(res.data[0])
       } catch (error) {
         console.error('Error in feching evolution:', error)
@@ -34,7 +34,6 @@ function Evolution() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(formData)
     updateEvolution(id, formData)
     navigate('/')
   }
