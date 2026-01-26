@@ -33,7 +33,7 @@ function Patients() {
               <td>{patient?.idNumber || ''}</td>
               <td><Link to={`/details/${patient._id}`}>Ver/Editar</Link></td>
               <td className='hidden sm:block'><Link>Modificar</Link></td>
-              <td><Link>Agregar</Link></td>
+              <td><Link to={`/evolution/${patient._id}`}>Agregar</Link></td>
             </tr>
           )})}
         </tbody>
