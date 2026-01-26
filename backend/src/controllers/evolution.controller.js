@@ -22,8 +22,6 @@ export const updateEvolution = async (req, res) => {
             return res.status(400).json({ message: 'No evolution/patient ID found' })
         }
         const evolution = await Evolution.find({ patient: id })
-        console.log(evolution)
-        console.log(req.body.body)
         evolution[0].update.push({ body: body })
         await evolution[0].save()
 

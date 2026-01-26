@@ -9,7 +9,7 @@ import PageLoader from '../components/PageLoader.jsx'
 
 function Evolution() {
   const [isLoading, setIsLoading] = useState(true)
-  const [evolutionData, setEvolutionData] = useState()
+  const [evolutionData, setEvolutionData] = useState('')
   const [formData, setFormData] = useState({ body: '' })
   const { isUpdatingEvolution, updateEvolution } = useEvolutionStore()
 
