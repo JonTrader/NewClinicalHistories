@@ -34,7 +34,6 @@ function Evolution() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(formData)
     updateEvolution(id, formData)
     navigate('/')
   }
