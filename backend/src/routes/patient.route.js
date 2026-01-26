@@ -3,6 +3,7 @@ import { getAllPatients, createPatient, editPatient, deletePatient, getPatientDe
 import { getEvolution, updateEvolution } from '../controllers/evolution.controller.js'
 import { protectRoute } from '../middleware/auth.middleware.js'
 import { arcjetProtection } from '../middleware/arcjet.middleware.js'
+import { getOdontogram, updateOdontogram } from '../controllers/odontogram.controller.js'
 
 const router = express.Router()
 
@@ -14,12 +15,14 @@ router.use(arcjetProtection, protectRoute)
 
 router.get('/', getAllPatients)
 router.get('/:id', getPatientDetails)
-router.get('/evolution/:id', getEvolution)
+router.get('/:id/evolution', getEvolution)
+router.get('/:id/odontogram', getOdontogram)
 
 router.post('/', createPatient)
 
 router.put('/:id', editPatient)
 router.put('/:id/evolution', updateEvolution)
+router.put('/:id/odontogram', updateOdontogram)
 
 router.delete('/:id', deletePatient)
 

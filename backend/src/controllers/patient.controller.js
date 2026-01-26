@@ -25,7 +25,9 @@ export const createPatient = async (req, res) => {
         const newPatient = new Patient({...req.body, doctor: userId })
         const newOdontogram = new Odontogram({
             teeth,
-            patient: newPatient._id
+            patient: newPatient._id,
+            problemas: Array(4).fill(''),
+            tejidosBlandos: Array(14).fill(null)
         })
         const newEvolution = new Evolution({
             patient: newPatient._id
