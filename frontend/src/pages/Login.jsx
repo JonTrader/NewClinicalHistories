@@ -19,8 +19,8 @@ function Login() {
 
   return (
     <form onSubmit={handleSubmit} className='flex justify-center items-center h-screen'>
-      <fieldset className="fieldset bg-[#1E232B] border-base-800 text-[#E0C6AB] rounded-box w-sm border p-10">
-        <legend className="fieldset-legend text-[#E0C6AB]">Login</legend>
+      <fieldset className="fieldset bg-blueDeep text-lightOcre border-base-800 rounded-box w-sm border p-10">
+        <legend className="fieldset-legend text-lightOcre">Login</legend>
 
         <label className="label mt-4">Email</label>
         <input type="email" className="input" placeholder="Email"
@@ -34,7 +34,7 @@ function Login() {
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         />
 
-        <button className="btn text-[#E0C6AB] bg-[#283e63] mt-4" disabled={isLoggingIn}>{isLoggingIn ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Login'}</button>
+        <button className="btn text-lightOcre bg-blueSteel mt-4" disabled={isLoggingIn}>{isLoggingIn ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Login'}</button>
         <div className='mt-6 text-center'>
           <Link to="/register" className="auth-link">
             Don't have an account? Register

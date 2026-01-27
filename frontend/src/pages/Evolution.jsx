@@ -34,6 +34,10 @@ function Evolution() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if(formData.body === '') {
+      toast.error('Texto es requerido.')
+      return
+    }
     updateEvolution(id, formData)
     navigate('/')
   }
@@ -41,15 +45,15 @@ function Evolution() {
   if (isLoading) return <PageLoader />
 
   return (
-    <div>
-      <div>
+    <div className='p-10 md:p-24 font-serif text-lightOcre'>
+      <div className='gap-2 justify-items-center grid grid-cols-1'>
         {evolutionData.update.map(item => (
           <InputTextarea disabled size={"lg:w-200 w-80 sm:w-96 md:w-156 opacity-75"} label={item?.createdAt || 'Data shuld go here'} text={item.body} />
         ))}
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className=' p-10 gap-4 md:gap-6 justify-items-center grid grid-cols-1'>
         <InputTextarea size={"lg:w-200 w-80 sm:w-96 md:w-156"} label="Nueva evolucion" onChange={(e) => setFormData({ body: e.target.value })} />
-        <button className='btn btn-xl'>{isUpdatingEvolution ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Agregar'}</button>
+        <button className='btn btn-md text-lightSand hover:text-lightOcre'>{isUpdatingEvolution ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Agregar'}</button>
       </form>
     </div>
   )

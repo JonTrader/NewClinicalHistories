@@ -2,12 +2,7 @@ function InputFieldset({ label, onChange, value, disabled = false, required = fa
     let styleClass = `input input-sm ${required ? 'validator' : ''}`
     const isTypeTel = type === 'tel'
 
-    const returnValue = (!isTypeTel ? (
-        < fieldset className="fieldset w-3/4" >
-            <p className="label">{label}</p>
-            <input disabled={disabled} required={required} type={type} className={styleClass} onChange={onChange} value={value} />
-        </fieldset >
-    ) : (
+    const typeTel = (
         <fieldset className="fieldset w-3/4">
             <p className="label">{label}</p>
             <label className="input input-sm">
@@ -24,8 +19,16 @@ function InputFieldset({ label, onChange, value, disabled = false, required = fa
                 />
             </label>
         </fieldset>
-    ))
-    return returnValue
+    )
+
+    const notTypeTel = (
+        < fieldset className="fieldset w-3/4" >
+            <p className="label">{label}</p>
+            <input disabled={disabled} required={required} type={type} className={styleClass} onChange={onChange} value={value} />
+        </fieldset >
+    )
+
+    return !isTypeTel ? notTypeTel : typeTel 
 }
 
 export default InputFieldset
