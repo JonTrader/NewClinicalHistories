@@ -4,12 +4,12 @@ export const getEvolution = async (req, res) => {
     try {
         const { id } = req.params
         if (!id) {
-            return res.status(400).json({ message: 'No id retrieved' })
+            return res.status(400).json({ message: 'No ID retrieved' })
         }
         const evolution = await Evolution.find({ patient: id })
         return res.status(200).json(evolution)
     } catch (error) {
-        console.error('Error in get Evolution controller: ', error)
+        console.error('Error in getEvolution controller: ', error)
         return res.status(500).json({ message: 'Internal server error trying to get evolution' })
     }
 }
@@ -19,7 +19,7 @@ export const updateEvolution = async (req, res) => {
         const { id } = req.params
         const { body } = req.body
         if (!id) {
-            return res.status(400).json({ message: 'No evolution/patient ID found' })
+            return res.status(400).json({ message: 'No ID retrieved' })
         }
         const evolution = await Evolution.find({ patient: id })
         evolution[0].update.push({ body: body })

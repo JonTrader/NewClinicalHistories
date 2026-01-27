@@ -27,7 +27,7 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await ax.post('/api/v1/auth/register', data)
             set({ authUser: res.data })
-            toast.success('Cuenta creada exitosamente')
+            toast.success('Cuenta creada')
         } catch (error) {
             console.error('Error in registering: ', error)
             toast.error(error.response?.data?.message)
@@ -41,7 +41,7 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await ax.post('/api/v1/auth/login', data)
             set({ authUser: res.data })
-            toast.success('Login exitoso')
+            toast.success('Logged In')
         } catch (error) {
             console.error('Error in logging in: ', error)
             toast.error(error.response?.data?.message)
@@ -55,7 +55,7 @@ export const useAuthStore = create((set) => ({
         try {
             await ax.post('/api/v1/auth/logout')
             set({ authUser: null })
-            toast.success('Log out exitoso')
+            toast.success('Logged Out')
         } catch (error) {
             console.error('Error in logging out: ', error)
             toast.error(error.response?.data?.message)

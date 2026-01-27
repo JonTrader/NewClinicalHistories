@@ -18,7 +18,7 @@ function Odontogram() {
   useEffect(() => {
     const fetchOdontogram = async (id) => {
       try {
-        const res = await ax.get(`/api/v1/patients/${id}/odontogram`)
+        const res = await ax.get(`/api/v1/odontograms/${id}`)
         setFormData(res.data[0])
       } catch (error) {
         console.error('Error in fetching patient odontogram: ', error)

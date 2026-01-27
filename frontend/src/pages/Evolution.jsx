@@ -20,7 +20,7 @@ function Evolution() {
   useEffect(() => {
     const fetchEvolution = async (id) => {
       try {
-        const res = await ax.get(`/api/v1/patients/${id}/evolution`)
+        const res = await ax.get(`/api/v1/evolutions/${id}`)
         setEvolutionData(res.data[0])
       } catch (error) {
         console.error('Error in feching evolution:', error)
@@ -35,7 +35,7 @@ function Evolution() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if(formData.body === '') {
-      toast.error('Texto es requerido.')
+      toast.error('Texto es requerido')
       return
     }
     updateEvolution(id, formData)

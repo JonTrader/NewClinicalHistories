@@ -27,7 +27,7 @@ export const usePatientStore = create((set) => ({
         set({ isCreatingPatient: true })
         try {
             await ax.post('/api/v1/patients', data)
-            toast.success('Patient created successfully')
+            toast.success('Paciente creado')
         } catch (error) {
             console.error('Error in create patient in patient store: ', error)
             toast.error(error.response?.data?.message)
@@ -53,7 +53,7 @@ export const usePatientStore = create((set) => ({
         set({ isEditingPatient: true })
         try {
             await ax.put(`/api/v1/patients/${id}`, data)
-            toast.success('Patient updated')
+            toast.success('Paciente actualizado')
         } catch (error) {
             console.error('Error in editing patient: ', error)
             toast.error(error.response?.data?.message)
@@ -66,7 +66,7 @@ export const usePatientStore = create((set) => ({
         set({ isDeletingPatient: true })
         try {
             await ax.delete(`/api/v1/patients/${id}`)
-            toast.success('Patient deleted')
+            toast.success('Paciente borrado')
         } catch (error) {
             console.error('Error in deleting patient: ', error)
             toast.error(error.response?.data?.message)

@@ -8,8 +8,8 @@ export const useEvolutionStore = create((set) => ({
     updateEvolution: async (id, data) => {
         set({ isUpdatingEvolution: true })
         try {
-            await ax.put(`/api/v1/patients/${id}/evolution`, data)
-            toast.success('Patient has been updated')
+            await ax.put(`/api/v1/evolutions/${id}`, data)
+            toast.success('Paciente ha sido actualizado')
         } catch (error) {
             console.error('Error in updateEvolution store: ', error)
             toast.error(error.response?.data?.message)
