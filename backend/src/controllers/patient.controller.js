@@ -20,9 +20,9 @@ export const createPatient = async (req, res) => {
         const userId = req.user._id
         const { firstName, lastName } = req.body
         if (!firstName || !lastName) {
-            return res.status(400).json({ message: 'First name and last name is required' })
+            return res.status(400).json({ message: 'First name and last name are required' })
         }
-        const newPatient = new Patient({...req.body, doctor: userId })
+        const newPatient = new Patient({ ...req.body, doctor: userId })
         const newOdontogram = new Odontogram({
             teeth,
             patient: newPatient._id,
@@ -32,7 +32,7 @@ export const createPatient = async (req, res) => {
         const newEvolution = new Evolution({
             patient: newPatient._id
         })
-        newEvolution.update.push({ body: 'Paciente ha sido creado.'}) 
+        newEvolution.update.push({ body: 'Paciente creado' })
 
         await newPatient.save()
         await newOdontogram.save()
@@ -48,9 +48,9 @@ export const editPatient = async (req, res) => {
     try {
         const { id } = req.params;
         if (!id) {
-            return res.status(400).json({ message: 'No patient id found for updating' })
+            return res.status(400).json({ message: 'No ID retrieved' })
         }
-        const patient = await Patient.findByIdAndUpdate(id, { ...req.body }, { new: true})
+        const patient = await Patient.findByIdAndUpdate(id, { ...req.body }, { new: true })
         return res.status(200).json(patient)
     } catch (error) {
         console.error('Error in editPatient controller: ', error)
@@ -63,7 +63,7 @@ export const deletePatient = async (req, res) => {
     try {
         const { id } = req.params
         if (!id) {
-            return res.status(400).json({ message: 'No patient id found for deletion' })
+            return res.status(400).json({ message: 'No ID retrieved' })
         }
         await Patient.findByIdAndDelete(id);
         return res.status(200).json({ message: 'Patient has been deleted' })
@@ -77,15 +77,15 @@ export const getPatientDetails = async (req, res) => {
     try {
         const { id } = req.params
         if (!id) {
-            return res.status(400).json({ message: 'No patient id found for editing/viewing' })
+            return res.status(400).json({ message: 'No ID retrieved' })
         }
         const patient = await Patient.findById(id)
         if (!patient.doctor.equals(req.user._id)) {
-            return res.status(400).json({ message: 'You are not allowed to view/edit details' })
+            return res.status(400).json({ message: 'You are not allowed to view/edit patient details' })
         }
         return res.status(200).json(patient)
     } catch (error) {
         console.error('Error in getDetails controller: ', error)
-        res.status(500).json({ message: 'Internal server errir trying to getPatientDetails' })
+        res.status(500).json({ message: 'Internal server error trying to getPatientDetails' })
     }
 }

@@ -6,6 +6,8 @@ import { env } from './lib/env.js'
 import { connectToDatabase } from './lib/db.js'
 import authRoutes from './routes/auth.route.js'
 import patientRoutes from './routes/patient.route.js'
+import odontogramRoutes from './routes/odontogram.route.js'
+import evolutionRoutes from './routes/evolution.route.js'
 
 
 const app = express()
@@ -21,6 +23,8 @@ app.use(cors({
 
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/patients', patientRoutes)
+app.use('/api/v1/odontograms', odontogramRoutes)
+app.use('/api/v1/evolutions', evolutionRoutes)
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
