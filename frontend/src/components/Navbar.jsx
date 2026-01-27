@@ -6,13 +6,13 @@ function Navbar() {
     const { logout } = useAuthStore()
 
     return (
-        <div className="navbar px-8 bg-[#1E232B] shadow-sm">
+        <div className="navbar px-8 bg-blueDeep shadow-sm text-lightBone">
             <div className="navbar-start">
-                <Link to="/" className="font-serif text-[#E0C6AB] text-sm hover:cursor-pointer hover:scale-110 transition-all">Pacientes</Link>
+                <Link to="/" className="font-serif text-lightBone text-sm hover:cursor-pointer hover:text-lightOcre hover:scale-110 transition-all">Pacientes</Link>
             </div>
             <div className="navbar-end">
-                <Link to="/new" className="btn mr-4 text-[#E0C6AB] bg-[#283E63]"><Plus /></Link>
-                <a onClick={logout} className="font-serif text-sm text-[#E0C6AB] hover:cursor-pointer hover:scale-110 transition-all">Logout</a>
+                <Link to="/new" className="btn mr-4 bg-blueSteel hover:text-lightOcre"><Plus /></Link>
+                <a onClick={logout} className="font-serif text-sm hover:cursor-pointer hover:scale-110 hover:text-lightOcre transition-all">Logout</a>
             </div>
         </div>
     )

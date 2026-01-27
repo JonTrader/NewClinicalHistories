@@ -2,8 +2,8 @@
 
 function TableSkeleton() {
     return (
-        <div className="mt-10">
-            <table className="table table-xs text-center">
+        <div className="mt-10 p-10">
+            <table className="table table-xs lg:table-md text-center">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -15,74 +15,74 @@ function TableSkeleton() {
                 </thead>
                 <tbody>
                     <tr>
-                        <th className="skeleton  bg-[#1e232b69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                     <tr>
-                        <th className="skeleton  bg-[#1E232B69]"></th>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1E232B69]"></td>
-                        <td className="hidden sm:block skeleton bg-[#1E232B69]"></td>
-                        <td className="skeleton bg-[#1e232b69]"></td>
+                        <th className="skeleton  bg-blueDeep-100"></th>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
+                        <td className="hidden sm:block skeleton bg-blueDeep-100"></td>
+                        <td className="skeleton bg-blueDeep-100"></td>
                     </tr>
                 </tbody>
             </table>

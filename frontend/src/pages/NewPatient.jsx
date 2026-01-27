@@ -31,10 +31,10 @@ function NewPatient() {
 
   return (
     <form action="" onSubmit={handleSubmit}>
-      <div className='p-6 md:p-24 font-serif text-[#E0C6AB]'>
+      <div className='p-6 md:p-24 font-serif text-lightOcre'>
         <div className='text-center'>
-          <h2 className='text-2xl'>Informacion Basica</h2>
-          <div className='mt-2 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <h2 className='text-3xl'>Informacion Basica</h2>
+          <div className='mt-8 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             <InputFieldset required onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} label={'Nombre(s) *'} />
             <InputFieldset required onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} label={'Apellido(s) *'} />
             <InputFieldset type={'email'} onChange={(e) => setFormData({ ...formData, email: e.target.value })} label={'Correo Electronico'} />
@@ -79,22 +79,22 @@ function NewPatient() {
           </div>
         </div>
         <div className='mt-16 text-center '>
-          <h2 className='text-2xl'>Contacto de Emergencia</h2>
-          <div className='mt-2 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
+          <h2 className='text-3xl'>Contacto de Emergencia</h2>
+          <div className='mt-8 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, emergencyContactName: e.target.value })} label={'Nombre Completo'} />
             <InputFieldset type="tel" onChange={(e) => setFormData({ ...formData, emergencyContactNumber: parseInt(e.target.value) })} label={'# de Telefono'} />
             <InputFieldset type="text" onChange={(e) => setFormData({ ...formData, emergencyContactRelationship: e.target.value })} label={'Parentesco'} />
           </div>
         </div>
         <div className='mt-16 text-center '>
-          <h2 className='text-2xl'>Motivo de consulta</h2>
-          <div className='mt-2 justify-items-center grid grid-cols-1'>
+          <h2 className='text-3xl'>Motivo de consulta</h2>
+          <div className='mt-8 justify-items-center grid grid-cols-1'>
             <InputTextarea size={"lg:w-200 w-80 sm:w-96 md:w-156"} label={'Motivo'} onChange={(e) => setFormData({ ...formData, motive: e.target.value })} />
           </div>
         </div>
         <div className='mt-16 text-center'>
-          <h2 className='text-2xl'>Antecedentes Medicos</h2>
-          <div className=' mt-2 justify-items-center grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3'>
+          <h2 className='text-3xl'>Antecedentes Medicos</h2>
+          <div className=' mt-8 justify-items-center grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3'>
             <InputTextarea size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'1. Antecedentes alregicos?'} text={formData.medicalHistoryQuestions[0]} onChange={(e) => updateArray('medicalHistoryQuestions', 0, e.target.value)} />
             <InputTextarea size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'2. Cardiovasculares?'} text={formData.medicalHistoryQuestions[1]} onChange={(e) => updateArray('medicalHistoryQuestions', 1, e.target.value)} />
             <InputTextarea size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'3. Neurológicos?'} text={formData.medicalHistoryQuestions[2]} onChange={(e) => updateArray('medicalHistoryQuestions', 2, e.target.value)} />
@@ -120,15 +120,15 @@ function NewPatient() {
           </div>
         </div>
         <div className='mt-16 text-center'>
-          <h2 className='text-2xl'>Antecedentes Odontologicos</h2>
-          <div className=' mt-2 justify-items-center grid grid-cols-1 md:grid-cols-2'>
+          <h2 className='text-3xl'>Antecedentes Odontologicos</h2>
+          <div className=' mt-8 justify-items-center grid grid-cols-1 md:grid-cols-2'>
             <InputTextarea size={"lg:w-80 xl:w-125 w-80 sm:w-96 md:w-65"} label={'1. Anestesia local? Reaccion?'} text={formData.dentalHistoryQuestions[0]} onChange={(e) => updateArray('dentalHistoryQuestions', 0, e.target.value)} />
             <InputTextarea size={"lg:w-80 xl:w-125 w-80 sm:w-96 md:w-65"} label={'2. Ultima visita al Odontologo? Tratamiento?'} text={formData.dentalHistoryQuestions[1]} onChange={(e) => updateArray('dentalHistoryQuestions', 1, e.target.value)} />
           </div>
         </div>
         <div className='py-10 text-center'>
           <div className=' mt-4 justify-items-center sm:justify-items-center grid grid-cols-1'>
-            <button className='btn btn-md w-35 text-xs'>{isCreatingPatient ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Crear Paciente'}</button>
+            <button className='btn btn-md w-35 text-xs text-lightSand bg-blueDeep hover:text-lightOcre transition-colors'>{isCreatingPatient ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Crear Paciente'}</button>
           </div>
         </div>
       </div>

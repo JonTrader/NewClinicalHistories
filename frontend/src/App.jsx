@@ -40,7 +40,7 @@ function App() {
 
   if (isCheckingAuth) return <PageLoader />
   return (
-    <div className='min-h-screen bg-[#283E63] relative'>
+    <div className='min-h-screen bg-blueSteel relative'>
       <Routes>
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to='/' replace/>} />
         <Route path="/register" element={!authUser ? <Register /> : <Navigate to='/' replace/>} />
