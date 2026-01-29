@@ -45,7 +45,7 @@ function Patients() {
               <path d="m21 21-4.3-4.3"></path>
             </g>
           </svg>
-          <input onChange={handleSearch} type="search" className="grow" placeholder="Buscar" />
+          <input onChange={handleSearch} id="search" type="search" className="grow" placeholder="Buscar" />
         </label>
         <div></div>
         <div></div>

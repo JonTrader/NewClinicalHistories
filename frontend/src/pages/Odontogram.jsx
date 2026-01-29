@@ -43,10 +43,10 @@ function Odontogram() {
       <div className='text-center'>
         <h2 className='text-3xl'>Odontograma</h2>
         <div className='mt-8 gap-1 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-          {formData.teeth.map((tooth) =>
+          {formData.teeth.map((tooth, index) =>
             <label className="input">
               <span className="label">{tooth.number}</span>
-              <input type="text" value={tooth.description} onChange={(e) => setFormData({ ...formData }, tooth.description = e.target.value)} />
+              <input key={index} type="text" value={tooth.description} onChange={(e) => setFormData({ ...formData }, tooth.description = e.target.value)} />
             </label>
           )}
         </div>
@@ -63,8 +63,8 @@ function Odontogram() {
           </thead>
           <tbody>
             {formData.tejidosBlandos.map((item, index) =>
-              <tr className="hover:bg-base-300">
-                <th className='font-medium lg:text-lg'>{tejidosBlandos[index]}</th>
+              <tr key={index} className="hover:bg-base-300">
+                <th  className='font-medium lg:text-lg'>{tejidosBlandos[index]}</th>
                 <td><input type="radio" value='true' name={`radio-${index}`} className="radio" defaultChecked={item === true} onChange={e => setFormData({ ...formData }, formData.tejidosBlandos[index] = e.target.value)} /></td>
                 <td><input type="radio" value='false' name={`radio-${index}`} className="radio" defaultChecked={item === false} onChange={e => setFormData({ ...formData }, formData.tejidosBlandos[index] = e.target.value)} /></td>
               </tr>
@@ -78,7 +78,7 @@ function Odontogram() {
           {formData.problemas.map((item, index) =>
             <label className="input w-180 lg:w-125">
               <span className="label">{problemas[index]}</span>
-              <input type="text" value={item} onChange={e => setFormData({ ...formData }, formData.problemas[index] = e.target.value)} />
+              <input key={index} type="text" value={item} onChange={e => setFormData({ ...formData }, formData.problemas[index] = e.target.value)} />
             </label>
           )}
         </div>

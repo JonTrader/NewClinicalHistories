@@ -47,8 +47,8 @@ function Evolution() {
   return (
     <div className='p-10 md:p-24 font-serif text-lightOcre'>
       <div className='gap-2 justify-items-center grid grid-cols-1'>
-        {evolutionData.update.map(item => (
-          <InputTextarea disabled size={"lg:w-200 w-80 sm:w-96 md:w-156 opacity-75"} label={item?.createdAt || 'Data shuld go here'} text={item.body} />
+        {evolutionData.update.map((item, index) => (
+          <InputTextarea key={index} disabled size={"lg:w-200 w-80 sm:w-96 md:w-156 opacity-75"} label={item?.createdAt || 'Data shuld go here'} text={item.body} />
         ))}
       </div>
       <form onSubmit={handleSubmit} className=' p-10 gap-4 md:gap-6 justify-items-center grid grid-cols-1'>
