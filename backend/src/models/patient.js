@@ -27,10 +27,17 @@ const PatientSchema = new mongoose.Schema({
     emergencyContactName: String,
     emergencyContactNumber: Number,
     emergencyContactRelationship: String,
-    medicalHistoryQuestions: [String],
-    dentalHistoryQuestions: [String],
+    medicalHistoryQuestions: {
+        type: [String],
+        required: true
+    },
+    dentalHistoryQuestions: {
+        type: [String],
+        required: true
+    },
     doctor: {
         type: mongoose.Schema.Types.ObjectId,
+        required: true,
         ref: 'User'
     }
 }, { timestamps: true })
