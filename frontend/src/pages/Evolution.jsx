@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
-import InputTextarea from '../components/InputTextarea.jsx'
+import FieldsetTextarea from '../components/FieldsetTextarea.jsx'
 import { LoaderIcon } from 'lucide-react'
 import { useEvolutionStore } from '../store/EvolutionStore.js'
 import { ax } from '../lib/axios.js'
@@ -47,12 +47,12 @@ function Evolution() {
   return (
     <div className='p-10 md:p-24 font-serif text-lightOcre'>
       <div className='gap-2 justify-items-center grid grid-cols-1'>
-        {evolutionData.update.map((item, index) => (
-          <InputTextarea key={index} disabled size={"lg:w-200 w-80 sm:w-96 md:w-156 opacity-75"} label={item?.createdAt || 'Data shuld go here'} text={item.body} />
+        {evolutionData.update.map(item => (
+          <FieldsetTextarea key={item?.createdAt} disabled size={"lg:w-200 w-80 sm:w-96 md:w-156 opacity-75"} label={item?.createdAt.toString() || 'Date'} text={item.body} />
         ))}
       </div>
       <form onSubmit={handleSubmit} className=' p-10 gap-4 md:gap-6 justify-items-center grid grid-cols-1'>
-        <InputTextarea size={"lg:w-200 w-80 sm:w-96 md:w-156"} label="Nueva evolucion" onChange={(e) => setFormData({ body: e.target.value })} />
+        <FieldsetTextarea size={"lg:w-200 w-80 sm:w-96 md:w-156"} label="Nueva evolucion" onChange={(e) => setFormData({ body: e.target.value })} />
         <button className='btn btn-md text-lightSand hover:text-lightOcre'>{isUpdatingEvolution ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Agregar'}</button>
       </form>
     </div>

@@ -21,3 +21,11 @@ export const problemas = [
     'Bolsa Periodontales',
     'Calculos Dentales'
 ]
+
+export const antecedentesMedicos = [
+
+]
+
+export const antecedentesOdontologicos = [
+    
+]
