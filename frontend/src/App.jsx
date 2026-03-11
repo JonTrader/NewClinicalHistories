@@ -15,9 +15,9 @@ import { useAuthStore } from './store/AuthStore.js'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 
-const MainLayout = () => (
+const MainLayout = ({img}) => (
   <>
-    <Navbar />
+    <Navbar img={img}/>
     <Outlet />
     <Footer />
   </>
@@ -45,7 +45,7 @@ function App() {
       <Routes>
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to='/' replace/>} />
         <Route path="/register" element={!authUser ? <Register /> : <Navigate to='/' replace/>} />
-        <Route element={<MainLayout />}>
+        <Route element={<MainLayout img={authUser ? authUser.logo : null}/>}>
           <Route element={<ProtectedRoute user={authUser} />}>
             <Route path="/" element={<Patients />} />
             <Route path="/new" element={<NewPatient />} />

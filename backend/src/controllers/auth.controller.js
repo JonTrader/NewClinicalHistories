@@ -2,6 +2,8 @@ import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
 import { generateToken } from '../lib/utils.js'
 import { sendWelcomeEmail } from '../emails/emailHandler.js'
+import { env } from '../lib/env.js'
+import cloudinary from '../lib/cloudinary.js'
 
 export const register = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -39,7 +41,7 @@ export const register = async (req, res) => {
             const savedUser = await newUser.save()
             generateToken(savedUser._id, res)
 
-            const { CLIENT_URL } = process.env
+            const { CLIENT_URL } = env
             try {
                 await sendWelcomeEmail(savedUser.email, firstName, CLIENT_URL)
             } catch (error) {
@@ -98,55 +100,29 @@ export const logout = async (req, res) => {
 }
 
 export const updateProfile = async (req, res) => {
-    const { firstName, lastName } = req.body;
+    const { firstName, lastName, logo } = req.body;
     const userId = req.user._id
 
     try {
         if (!firstName || !lastName) {
-            return res.status(400).json({ message: 'All fields are required' })
+            return res.status(400).json({ message: 'Both first name and last name are required.' })
         }
+
+        const uploadResponse = await cloudinary.uploader.upload(logo);
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { firstName, lastName },
-            { new: true, runValidators: true }
+            { firstName, lastName, logo: uploadResponse.secure_url },
+            { new: true }
         )
 
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' })
         }
 
-        return res.status(200).json({
-            _id: updatedUser._id,
-            email: updatedUser.email,
-            firstName: updatedUser.firstName,
-            lastName: updatedUser.lastName
-        })
+        return res.status(200).json({})
     } catch (error) {
         console.error('Error in updateProfile controller: ', error)
         return res.status(500).json({ message: 'Internal server error' })
-    }
-}
-
-export const updateLogo = async (req, res) => {
-    try {
-        const { logo } = req.body;
-        if (!logo) return res.status(400).json({ message: "Logo is required" });
-
-        const userId = req.user._id;
-
-        // import cloudinary and its functionality
-        const uploadResponse = await cloudinary.uploader.upload(logo);
-
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { logo: uploadResponse.secure_url },
-            { new: true }
-        );
-
-        res.status(200).json(updatedUser);
-    } catch (error) {
-        console.log("Error in update profile:", error);
-        res.status(500).json({ message: "Internal server error" });
     }
 }
