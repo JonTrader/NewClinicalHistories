@@ -12,6 +12,7 @@ const router = express.Router()
 router.use(arcjetProtection, protectRoute)
 
 router.get('/:id', getEvolution)
+
 router.put('/:id', updateEvolution)
 
 export default router

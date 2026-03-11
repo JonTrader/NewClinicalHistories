@@ -10,5 +10,6 @@ export const env = {
     CLIENT_URL: process.env.CLIENT_URL,
     NODE_ENV: process.env.NODE_ENV,
     ARCJET_ENV: process.env.ARCJET_ENV,
-    ARCJET_KEY: process.env.ARCJET_KEY
+    ARCJET_KEY: process.env.ARCJET_KEY,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY
 }
