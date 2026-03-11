@@ -4,6 +4,7 @@ import { usePatientStore } from '../store/PatientStore.js'
 import { LoaderIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { ax } from '../lib/axios.js'
+import { antecedentesMedicos } from '../lib/patientHelper.js'
 import FieldsetInput from '../components/FieldsetInput.jsx'
 import SelectInput from '../components/SelectInput.jsx'
 import FieldsetTextarea from '../components/FieldsetTextarea.jsx'
@@ -129,28 +130,9 @@ function PatientDetails() {
           <div className='mt-16 text-center'>
             <h2 className='text-3xl'>Antecedentes Medicos</h2>
             <div className=' mt-8 justify-items-center grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3'>
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'1. Antecedentes alregicos?'} text={formData.medicalHistoryQuestions[0]} onChange={(e) => updateArray('medicalHistoryQuestions', 0, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'2. Cardiovasculares?'} text={formData.medicalHistoryQuestions[1]} onChange={(e) => updateArray('medicalHistoryQuestions', 1, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'3. Neurológicos?'} text={formData.medicalHistoryQuestions[2]} onChange={(e) => updateArray('medicalHistoryQuestions', 2, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'4. Hemadinámicos?'} text={formData.medicalHistoryQuestions[3]} onChange={(e) => updateArray('medicalHistoryQuestions', 3, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'5. Infeccionsos?'} text={formData.medicalHistoryQuestions[4]} onChange={(e) => updateArray('medicalHistoryQuestions', 4, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'6. Hormonales?'} text={formData.medicalHistoryQuestions[5]} onChange={(e) => updateArray('medicalHistoryQuestions', 5, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'7. Gastrointestinales?'} text={formData.medicalHistoryQuestions[6]} onChange={(e) => updateArray('medicalHistoryQuestions', 6, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'8. Respiratorios?'} text={formData.medicalHistoryQuestions[7]} onChange={(e) => updateArray('medicalHistoryQuestions', 7, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'9. Medico Quirurigicos?'} text={formData.medicalHistoryQuestions[8]} onChange={(e) => updateArray('medicalHistoryQuestions', 8, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'10. Hijos?'} text={formData.medicalHistoryQuestions[9]} onChange={(e) => updateArray('medicalHistoryQuestions', 9, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'11. Traumático?'} text={formData.medicalHistoryQuestions[10]} onChange={(e) => updateArray('medicalHistoryQuestions', 10, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'12. Renales?'} text={formData.medicalHistoryQuestions[11]} onChange={(e) => updateArray('medicalHistoryQuestions', 11, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'13. Psicologicos y/o Psiquiatricos?'} text={formData.medicalHistoryQuestions[12]} onChange={(e) => updateArray('medicalHistoryQuestions', 12, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'14. Cáncer?'} text={formData.medicalHistoryQuestions[13]} onChange={(e) => updateArray('medicalHistoryQuestions', 13, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'15. Osteoporosis?'} text={formData.medicalHistoryQuestions[14]} onChange={(e) => updateArray('medicalHistoryQuestions', 14, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'16. Condición de discapacidad?'} text={formData.medicalHistoryQuestions[15]} onChange={(e) => updateArray('medicalHistoryQuestions', 15, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'17. Consumo de Alcohol?'} text={formData.medicalHistoryQuestions[16]} onChange={(e) => updateArray('medicalHistoryQuestions', 16, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'18. Consumo de Tabaco?'} text={formData.medicalHistoryQuestions[17]} onChange={(e) => updateArray('medicalHistoryQuestions', 17, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'19. Consumo otras sustancias?'} text={formData.medicalHistoryQuestions[18]} onChange={(e) => updateArray('medicalHistoryQuestions', 18, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'20. Otro, cual?'} text={formData.medicalHistoryQuestions[19]} onChange={(e) => updateArray('medicalHistoryQuestions', 19, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'21. Ha sido hospitalizado?'} text={formData.medicalHistoryQuestions[20]} onChange={(e) => updateArray('medicalHistoryQuestions', 20, e.target.value)} />
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={'22. Tomando algun medicamento?'} text={formData.medicalHistoryQuestions[21]} onChange={(e) => updateArray('medicalHistoryQuestions', 21, e.target.value)} />
+              {antecedentesMedicos.map((question, index) => (
+                <FieldsetTextarea key={index} disabled={!isEditing} size={"lg:w-80 w-80 sm:w-96 md:w-65"} label={`${index + 1} ${question}`} text={formData.medicalHistoryQuestions[index]} onChange={(e) => updateArray('medicalHistoryQuestions', index, e.target.value)} />
+              ))}
             </div>
           </div>
           <div className='mt-16 text-center'>

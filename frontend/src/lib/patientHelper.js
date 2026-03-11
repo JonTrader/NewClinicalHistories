@@ -23,9 +23,26 @@ export const problemas = [
 ]
 
 export const antecedentesMedicos = [
-
-]
-
-export const antecedentesOdontologicos = [
-    
+    'Antecedentes alregicos?',
+    'Cardiovasculares?',
+    'Neurológicos?',
+    'Hemadinámicos?',
+    'Infeccionsos?',
+    'Hormonales?',
+    'Gastrointestinales?',
+    'Respiratorios?',
+    'Medico Quirurigicos?',
+    'Hijos?',
+    'Traumático?',
+    'Renales?',
+    'Psicologicos y / o Psiquiatricos?',
+    'Cáncer?',
+    'Osteoporosis?',
+    'Condición de discapacidad?',
+    'Consumo de Alcohol?',
+    'Consumo de Tabaco?',
+    'Consumo otras sustancias?',
+    'Otro, cual?',
+    'Ha sido hospitalizado?',
+    'Tomando algun medicamento?',
 ]
