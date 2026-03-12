@@ -96,3 +96,34 @@ export const logout = async (req, res) => {
     res.cookie('jwt', '', { maxAge: 0 })
     return res.status(200).json({ message: 'Logged out successfully' })
 }
+
+export const updateProfile = async (req, res) => {
+    const { firstName, lastName } = req.body;
+    const userId = req.user._id
+
+    try {
+        if (!firstName || !lastName) {
+            return res.status(400).json({ message: 'All fields are required' })
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { firstName, lastName },
+            { new: true, runValidators: true }
+        )
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+
+        return res.status(200).json({
+            _id: updatedUser._id,
+            email: updatedUser.email,
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName
+        })
+    } catch (error) {
+        console.error('Error in updateProfile controller: ', error)
+        return res.status(500).json({ message: 'Internal server error' })
+    }
+}

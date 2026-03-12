@@ -6,6 +6,7 @@ import Patients from './pages/Patients.jsx'
 import NewPatient from './pages/NewPatient.jsx'
 import Odontogram from './pages/Odontogram.jsx'
 import Evolution from './pages/Evolution.jsx'
+import UpdateProfile from './pages/UpdateProfile.jsx'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
@@ -51,6 +52,7 @@ function App() {
             <Route path="/details/:id" element={<PatientDetails />} />
             <Route path="/odontogram/:id" element={<Odontogram />} />
             <Route path="/evolution/:id" element={<Evolution />} />
+            <Route path="/profile" element={<UpdateProfile />} />
           </Route>
         </Route>
         <Route path='*' element={<Navigate to='/' replace />} />

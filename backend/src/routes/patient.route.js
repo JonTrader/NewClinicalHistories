@@ -15,14 +15,10 @@ router.use(arcjetProtection, protectRoute)
 
 router.get('/', getAllPatients)
 router.get('/:id', getPatientDetails)
-router.get('/:id/evolution', getEvolution)
-router.get('/:id/odontogram', getOdontogram)
 
 router.post('/', createPatient)
 
 router.put('/:id', editPatient)
-router.put('/:id/evolution', updateEvolution)
-router.put('/:id/odontogram', updateOdontogram)
 
 router.delete('/:id', deletePatient)
 

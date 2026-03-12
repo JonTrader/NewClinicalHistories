@@ -8,6 +8,7 @@ export const useAuthStore = create((set) => ({
     isRegistering: false,
     isLoggingIn: false,
     isLoggingOut: false,
+    isUpdatingProfile: false,
 
     checkAuth: async () => {
         set({ isCheckingAuth: true })
@@ -61,6 +62,20 @@ export const useAuthStore = create((set) => ({
             toast.error(error.response?.data?.message)
         } finally {
             set({ isLoggingOut: false })
+        }
+    },
+
+    updateProfile: async (data) => {
+        set({ isUpdatingProfile: true })
+        try {
+            const res = await ax.put('/api/v1/auth/update-profile', data)
+            set({ authUser: res.data })
+            toast.success('Profile updated successfully')
+        } catch (error) {
+            console.error('Error updating profile: ', error)
+            toast.error(error.response?.data?.message || 'Failed to update profile')
+        } finally {
+            set({ isUpdatingProfile: false })
         }
     }
 }))

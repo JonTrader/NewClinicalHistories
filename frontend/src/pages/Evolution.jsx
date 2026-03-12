@@ -11,6 +11,9 @@ function Evolution() {
   const [isLoading, setIsLoading] = useState(true)
   const [evolutionData, setEvolutionData] = useState([])
   const [formData, setFormData] = useState({ body: '' })
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false)
+  const [hasGeneratedSummary, setHasGeneratedSummary] = useState(false)
+  const [summary, setSummary] = useState('')
   const { isUpdatingEvolution, updateEvolution } = useEvolutionStore()
 
 
@@ -31,6 +34,25 @@ function Evolution() {
     }
     fetchEvolution(id)
   }, [id])
+
+  const generateSummary = async () => {
+    setIsGeneratingSummary(true)
+    let text = ``
+    evolutionData.update.map((evo, index) => (
+      text = text + `${index + 1}. ${evo.body.trim()}\n`
+    ))
+    console.log(text)
+    try {
+      const res = await ax.post('/api/v1/ai/summary', {text})
+      setSummary(res.data)
+      setHasGeneratedSummary(true)
+    } catch (error) {
+      console.error('Error trying to generate a summary', error)
+      toast.error(error.response?.data?.message)
+    } finally {
+      setIsGeneratingSummary(false)
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -55,6 +77,8 @@ function Evolution() {
         <FieldsetTextarea size={"lg:w-200 w-80 sm:w-96 md:w-156"} label="Nueva evolucion" onChange={(e) => setFormData({ body: e.target.value })} />
         <button className='btn btn-md text-lightSand hover:text-lightOcre'>{isUpdatingEvolution ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Agregar'}</button>
       </form>
+      <button className='btn' disabled={hasGeneratedSummary} onClick={generateSummary}>{isGeneratingSummary ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Summary'}</button>
+      {hasGeneratedSummary && <p style={{ whiteSpace: 'pre-line' }}>{summary}</p>}
     </div>
   )
 }
