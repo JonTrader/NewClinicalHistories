@@ -1,4 +1,4 @@
-function InputTextarea({ label, text, onChange, size, id, disabled = false }) {
+function InputTextarea({ label, text, id, onChange, size, disabled = false }) {
     let styleClass = `textarea ${size}`
     return (
         <fieldset className="fieldset">

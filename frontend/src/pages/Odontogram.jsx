@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { ax } from '../lib/axios.js'
-import { tejidosBlandos, problemas } from '../lib/odontogramHelper.js'
+import { tejidosBlandos, problemas } from '../lib/patientHelper.js'
 import PageLoader from '../components/PageLoader.jsx'
 import { useOdontogramStore } from '../store/Odontogram.js'
 import toast from 'react-hot-toast'
@@ -44,9 +44,9 @@ function Odontogram() {
         <h2 className='text-3xl'>Odontograma</h2>
         <div className='mt-8 gap-1 justify-items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {formData.teeth.map((tooth, index) =>
-            <label className="input">
+            <label key={index} className="input">
               <span className="label">{tooth.number}</span>
-              <input key={index} type="text" value={tooth.description} onChange={(e) => setFormData({ ...formData }, tooth.description = e.target.value)} />
+              <input type="text" value={tooth.description} onChange={(e) => setFormData({ ...formData }, tooth.description = e.target.value)} />
             </label>
           )}
         </div>
@@ -64,7 +64,7 @@ function Odontogram() {
           <tbody>
             {formData.tejidosBlandos.map((item, index) =>
               <tr key={index} className="hover:bg-base-300">
-                <th  className='font-medium lg:text-lg'>{tejidosBlandos[index]}</th>
+                <th className='font-medium lg:text-lg'>{tejidosBlandos[index]}</th>
                 <td><input type="radio" value='true' name={`radio-${index}`} className="radio" defaultChecked={item === true} onChange={e => setFormData({ ...formData }, formData.tejidosBlandos[index] = e.target.value)} /></td>
                 <td><input type="radio" value='false' name={`radio-${index}`} className="radio" defaultChecked={item === false} onChange={e => setFormData({ ...formData }, formData.tejidosBlandos[index] = e.target.value)} /></td>
               </tr>
@@ -76,9 +76,9 @@ function Odontogram() {
         <h2 className='text-3xl'>Problemas</h2>
         <div className='mt-8 gap-6 justify-items-center grid grid-cols-1 lg:grid-cols-2'>
           {formData.problemas.map((item, index) =>
-            <label className="input w-180 lg:w-125">
+            <label key={index} className="input w-180 lg:w-125">
               <span className="label">{problemas[index]}</span>
-              <input key={index} type="text" value={item} onChange={e => setFormData({ ...formData }, formData.problemas[index] = e.target.value)} />
+              <input type="text" value={item} onChange={e => setFormData({ ...formData }, formData.problemas[index] = e.target.value)} />
             </label>
           )}
         </div>
