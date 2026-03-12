@@ -2,8 +2,9 @@ import { useAuthStore } from '../store/AuthStore.js'
 import { Link } from 'react-router'
 import { Settings } from 'lucide-react'
 
-function Navbar({ img = null }) {
-    const { logout } = useAuthStore()
+function Navbar() {
+    const { authUser, logout } = useAuthStore()
+    const img = authUser?.logo
 
     return (
         <div className="font-serif navbar px-8 py-8 bg-blueDeep shadow-sm text-lightBone">
@@ -11,9 +12,9 @@ function Navbar({ img = null }) {
                 <Link to="/" className="text-lightBone text-sm hover:cursor-pointer hover:text-lightOcre hover:scale-110 transition-all">Pacientes</Link>
             </div>
             {img &&
-                <div className="navbar-center">
-                    <a className="h-8 w-12">
-                        <img src={img} alt="" />
+                <div className="navbar-center content-center h-8 w-12">
+                    <a >
+                        <img src={img || '/avatar.png'} alt="Logo" />
                     </a>
                 </div>
             }
