@@ -11,5 +11,8 @@ export const env = {
     NODE_ENV: process.env.NODE_ENV,
     ARCJET_ENV: process.env.ARCJET_ENV,
     ARCJET_KEY: process.env.ARCJET_KEY,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
     GEMINI_API_KEY: process.env.GEMINI_API_KEY
 }
