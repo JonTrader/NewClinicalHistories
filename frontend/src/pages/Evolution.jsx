@@ -6,6 +6,7 @@ import { useEvolutionStore } from '../store/EvolutionStore.js'
 import { ax } from '../lib/axios.js'
 import toast from 'react-hot-toast'
 import PageLoader from '../components/PageLoader.jsx'
+import { Brain } from 'lucide-react'
 
 function Evolution() {
   const [isLoading, setIsLoading] = useState(true)
@@ -41,9 +42,8 @@ function Evolution() {
     evolutionData.update.map((evo, index) => (
       text = text + `${index + 1}. ${evo.body.trim()}\n`
     ))
-    console.log(text)
     try {
-      const res = await ax.post('/api/v1/ai/summary', {text})
+      const res = await ax.post('/api/v1/ai/summary', { text })
       setSummary(res.data)
       setHasGeneratedSummary(true)
     } catch (error) {
@@ -56,7 +56,7 @@ function Evolution() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if(formData.body === '') {
+    if (formData.body === '') {
       toast.error('Texto es requerido')
       return
     }
@@ -67,7 +67,7 @@ function Evolution() {
   if (isLoading) return <PageLoader />
 
   return (
-    <div className='p-10 md:p-24 font-serif text-lightOcre'>
+    <div className='p-10 md:p-24 font-serif text-lightOcre justify-items-center'>
       <div className='gap-2 justify-items-center grid grid-cols-1'>
         {evolutionData.update.map(item => (
           <FieldsetTextarea key={item?.createdAt} disabled size={"lg:w-200 w-80 sm:w-96 md:w-156 opacity-75"} label={item?.createdAt.toString() || 'Date'} text={item.body} />
@@ -77,8 +77,17 @@ function Evolution() {
         <FieldsetTextarea size={"lg:w-200 w-80 sm:w-96 md:w-156"} label="Nueva evolucion" onChange={(e) => setFormData({ body: e.target.value })} />
         <button className='btn btn-md text-lightSand hover:text-lightOcre'>{isUpdatingEvolution ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Agregar'}</button>
       </form>
-      <button className='btn' disabled={hasGeneratedSummary} onClick={generateSummary}>{isGeneratingSummary ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Summary'}</button>
-      {hasGeneratedSummary && <p style={{ whiteSpace: 'pre-line' }}>{summary}</p>}
+      <div className="card lg:w-200 w-100 md:w-156 bg-base-100 shadow-sm">
+        <div className="card-body">
+          <div className="flex justify-between">
+            <h2 className="text-xl">Resumen</h2>
+            <span className="text-xl">
+              <button className='btn' disabled={hasGeneratedSummary} onClick={generateSummary}>{isGeneratingSummary ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Resumir con IA'}</button>
+            </span>
+          </div>
+          {hasGeneratedSummary && <FieldsetTextarea disabled size={"mt-6 w-auto h-96 textarea-success"} text={summary} />}
+        </div>
+      </div>
     </div>
   )
 }
