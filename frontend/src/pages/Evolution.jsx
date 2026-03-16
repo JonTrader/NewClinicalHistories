@@ -50,6 +50,7 @@ function Evolution() {
       const res = await ax.post(`/api/v1/ai/summary/${id}`, { text })
       setSummary(res.data)
       setHasGeneratedSummary(true)
+      toast.success("Resumen ha sido creado")
     } catch (error) {
       console.error('Error trying to generate a summary', error)
       toast.error(error.response?.data?.message)
