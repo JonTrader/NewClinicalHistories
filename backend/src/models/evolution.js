@@ -7,8 +7,14 @@ const UpdateSchema = new mongoose.Schema({
     }
 }, { timestamps: true, _id: false })
 
+const SummarySchema = new mongoose.Schema({
+    summary: String,
+    dateOfLastEvolution: Date
+}, { _id: false})
+
 const EvolutionSchema = new mongoose.Schema({
     update: [UpdateSchema],
+    summary: SummarySchema,
     patient: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Patient',

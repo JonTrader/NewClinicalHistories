@@ -124,7 +124,7 @@ function PatientDetails() {
           <div className='mt-16 text-center '>
             <h2 className='text-3xl'>Motivo de consulta</h2>
             <div className='mt-8 justify-items-center grid grid-cols-1'>
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-200 w-80 sm:w-96 md:w-156"} label={'Motivo'} onChange={(e) => setFormData({ ...formData, motive: e.target.value })} />
+              <FieldsetTextarea disabled={!isEditing} size={"lg:w-200 w-80 sm:w-96 md:w-156"} label={'Motivo'} text={formData?.motive} onChange={(e) => setFormData({ ...formData, motive: e.target.value })} />
             </div>
           </div>
           <div className='mt-16 text-center'>
