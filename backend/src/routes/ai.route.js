@@ -7,6 +7,6 @@ const router = express.Router()
 
 router.use(arcjetProtection, protectRoute)
 
-router.post('/summary', generateSummary)
+router.post('/summary/:id', generateSummary)
 
 export default router
