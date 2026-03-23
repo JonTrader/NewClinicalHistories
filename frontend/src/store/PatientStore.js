@@ -17,7 +17,7 @@ export const usePatientStore = create((set) => ({
             set({ patients: res.data })
         } catch (error) {
             console.error('Error in getAllPatients store: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema al cargar pacientes')
         } finally {
             set({ isPatientsLoading: false })
         }
@@ -30,7 +30,7 @@ export const usePatientStore = create((set) => ({
             toast.success('Paciente creado')
         } catch (error) {
             console.error('Error in create patient in patient store: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema creando paciente nuevo')
         } finally {
             set({ isCreatingPatient: false })
         }
@@ -43,7 +43,7 @@ export const usePatientStore = create((set) => ({
             return res.data
         } catch (error) {
             console.error('Error in getDetails store: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema al cargar detalles de paciente')
         } finally {
             set({ isDetailsLoading: false })
         }
@@ -56,7 +56,7 @@ export const usePatientStore = create((set) => ({
             toast.success('Paciente actualizado')
         } catch (error) {
             console.error('Error in editing patient: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema al actualizar paciente')
         } finally {
             set({ isEditingPatient: false })
         }
@@ -69,7 +69,7 @@ export const usePatientStore = create((set) => ({
             toast.success('Paciente borrado')
         } catch (error) {
             console.error('Error in deleting patient: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema al borrar paciente')
         } finally {
             set({ isDeletingPatient: false })
         }

@@ -22,7 +22,7 @@ function Odontogram() {
         setFormData(res.data[0])
       } catch (error) {
         console.error('Error in fetching patient odontogram: ', error)
-        toast.error(error.response?.data?.message)
+        toast.error(error.response?.data?.message || 'Problema cargando odontograma')
       } finally {
         setIsLoading(false)
       }
