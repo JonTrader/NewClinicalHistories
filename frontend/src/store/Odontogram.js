@@ -12,7 +12,7 @@ export const useOdontogramStore = create((set) => ({
             toast.success("Paciente ha sido actualizado")
         } catch (error) {
             console.error('Error in updateOdontogram store: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema actualizando odontograma')
         } finally {
             set({ isUpdatingOdontogram: false})
         }

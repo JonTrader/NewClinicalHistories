@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import FieldsetTextarea from '../components/FieldsetTextarea.jsx'
-import { LoaderIcon } from 'lucide-react'
+import { LoaderIcon, Brain } from 'lucide-react'
 import { useEvolutionStore } from '../store/EvolutionStore.js'
 import { ax } from '../lib/axios.js'
 import toast from 'react-hot-toast'
 import PageLoader from '../components/PageLoader.jsx'
-import { Brain } from 'lucide-react'
 
 function Evolution() {
   const [isEvolutionsLoading, setIsEvolutionsLoading] = useState(true)
@@ -32,7 +31,7 @@ function Evolution() {
         setSummary(res.data[0].summary?.summary)
       } catch (error) {
         console.error('Error in feching evolution:', error)
-        toast.error(error.response?.data?.message)
+        toast.error(error.response?.data?.message || 'Problema cargando evoluciones')
       } finally {
         setIsEvolutionsLoading(false)
       }

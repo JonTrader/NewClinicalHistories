@@ -26,7 +26,7 @@ function PatientDetails() {
         setFormData(res.data)
       } catch (error) {
         console.error('Error in fetching patient: ', error)
-        toast.error(error.response?.data?.message)
+        toast.error(error.response?.data?.message || 'Problema cargando detalles de paciente')
       } finally {
         setIsLoading(false)
       }

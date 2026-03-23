@@ -12,7 +12,7 @@ export const useEvolutionStore = create((set) => ({
             toast.success('Paciente ha sido actualizado')
         } catch (error) {
             console.error('Error in updateEvolution store: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema actualizando evolucion')
         } finally {
             set({ isUpdatingEvolution: false})
         }
