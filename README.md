@@ -2,7 +2,7 @@
 
 A full-stack web application built for dental professionals to manage patient records, odontograms, and clinical evolutions — with AI-powered assistance powered by Google Gemini.
 
-🔗 **Live Demo:** https://newclinicalhistories-ocyla.sevalla.app/
+🔗 **Live Demo:** https://newclinicalhistories-smlxb.sevalla.app/
 
 ---
 
@@ -23,33 +23,10 @@ You can log in with the following credentials to explore the app without registe
 
 | Field    | Value                     |
 |----------|---------------------------|
-| Email    | `demo@clinicapp.com`      |
-| Password | `Demo1234!`               |
+| Email    | `evoludent@hotmail.com`   |
+| Password | `Demo1234`                |
 
 Feel free to create a new patient or view/edit existing patients. Please be respectful when creating a patient as this account will be used by other people. The only fields that are required to create a patient are first and last names, no need to fill other fields.
-
----
-
-## Screenshots
-
-
-### Login & Registration
-![Login Page](./screenshots/login.png)
-
-### Patient Dashboard
-![Patient Dashboard](./screenshots/dashboard.png)
-
-### Odontogram Editor
-![Odontogram Editor](./screenshots/odontogram.png)
-
-### Clinical Evolutions
-![Clinical Evolutions](./screenshots/evolutions.png)
-
-### AI Evolution Generator
-![AI Evolution Generator](./screenshots/ai-evolution.png)
-
-### AI Patient Summary
-![AI Summary](./screenshots/ai-summary.png)
 
 ---
 
