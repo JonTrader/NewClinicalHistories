@@ -9,11 +9,13 @@ import FieldsetInput from '../components/FieldsetInput.jsx'
 import SelectInput from '../components/SelectInput.jsx'
 import FieldsetTextarea from '../components/FieldsetTextarea.jsx'
 import PageLoader from '../components/PageLoader.jsx'
+import ConfirmModal from '../components/ConfirmModal.jsx'
 
 function PatientDetails() {
   const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({})
   const [isEditing, setIsEditing] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { updatePatient, isEditingPatient, isDeletingPatient, deletePatient } = usePatientStore()
 
   const { id } = useParams()
@@ -26,7 +28,7 @@ function PatientDetails() {
         setFormData(res.data)
       } catch (error) {
         console.error('Error in fetching patient: ', error)
-        toast.error(error.response?.data?.message)
+        toast.error(error.response?.data?.message || 'Problema cargando detalles de paciente')
       } finally {
         setIsLoading(false)
       }
@@ -49,8 +51,7 @@ function PatientDetails() {
     navigate('/')
   }
 
-  const handleDelete = (e) => {
-    e.preventDefault()
+  const handleDelete = () => {
     deletePatient(id)
     navigate('/')
   }
@@ -59,11 +60,12 @@ function PatientDetails() {
 
   return (
     <>
+      <ConfirmModal isOpen={isModalOpen} onCancel={() => setIsModalOpen(false)} onConfirm={handleDelete} isLoading={isDeletingPatient} />
       <div className='py-4 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-4'>
         <button onClick={() => setIsEditing(wasEditing => !wasEditing)} className='btn btn-md w-35 text-xs'>{isEditing ? 'Ver' : 'Modifica'} Paciente</button>
         <div></div>
         <div></div>
-        <button onClick={handleDelete} className='btn btn-md w-35 text-xs'>{isDeletingPatient ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Borrar Paciente'}</button>
+        <button onClick={() => setIsModalOpen(true)} className='btn btn-md w-35 text-xs'>Borrar Paciente</button>
       </div>
       <form action="" onSubmit={handleSubmit} className='font-serif text-lightOcre'>
         <div className='p-6 md:p-24'>
@@ -124,7 +126,7 @@ function PatientDetails() {
           <div className='mt-16 text-center '>
             <h2 className='text-3xl'>Motivo de consulta</h2>
             <div className='mt-8 justify-items-center grid grid-cols-1'>
-              <FieldsetTextarea disabled={!isEditing} size={"lg:w-200 w-80 sm:w-96 md:w-156"} label={'Motivo'} onChange={(e) => setFormData({ ...formData, motive: e.target.value })} />
+              <FieldsetTextarea disabled={!isEditing} size={"lg:w-200 w-80 sm:w-96 md:w-156"} label={'Motivo'} text={formData?.motive} onChange={(e) => setFormData({ ...formData, motive: e.target.value })} />
             </div>
           </div>
           <div className='mt-16 text-center'>

@@ -1,5 +1,5 @@
 import express from 'express'
-import { protectRoute } from '../middleware/auth.middleware.js'
+import { protectRoute, isDoctor } from '../middleware/auth.middleware.js'
 import { arcjetProtection } from '../middleware/arcjet.middleware.js'
 import { getOdontogram, updateOdontogram } from '../controllers/odontogram.controller.js'
 
@@ -11,8 +11,8 @@ const router = express.Router()
 
 router.use(arcjetProtection, protectRoute)
 
-router.get('/:id', getOdontogram)
+router.get('/:id', isDoctor, getOdontogram)
 
-router.put('/:id', updateOdontogram)
+router.put('/:id', isDoctor, updateOdontogram)
 
 export default router

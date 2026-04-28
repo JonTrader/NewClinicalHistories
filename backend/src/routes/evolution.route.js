@@ -1,6 +1,6 @@
 import express from 'express'
 import { getEvolution, updateEvolution } from '../controllers/evolution.controller.js'
-import { protectRoute } from '../middleware/auth.middleware.js'
+import { protectRoute, isDoctor } from '../middleware/auth.middleware.js'
 import { arcjetProtection } from '../middleware/arcjet.middleware.js'
 
 const router = express.Router()
@@ -11,8 +11,8 @@ const router = express.Router()
 
 router.use(arcjetProtection, protectRoute)
 
-router.get('/:id', getEvolution)
+router.get('/:id', isDoctor, getEvolution)
 
-router.put('/:id', updateEvolution)
+router.put('/:id', isDoctor, updateEvolution)
 
 export default router

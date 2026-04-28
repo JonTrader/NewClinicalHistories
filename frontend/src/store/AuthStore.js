@@ -31,7 +31,7 @@ export const useAuthStore = create((set) => ({
             toast.success('Cuenta creada')
         } catch (error) {
             console.error('Error in registering: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema registrando usuario')
         } finally {
             set({ isRegistering: false })
         }
@@ -45,7 +45,7 @@ export const useAuthStore = create((set) => ({
             toast.success('Logged In')
         } catch (error) {
             console.error('Error in logging in: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema al ingresar')
         } finally {
             set({ isLoggingIn: false })
         }
@@ -59,7 +59,7 @@ export const useAuthStore = create((set) => ({
             toast.success('Logged Out')
         } catch (error) {
             console.error('Error in logging out: ', error)
-            toast.error(error.response?.data?.message)
+            toast.error(error.response?.data?.message || 'Problema al logout')
         } finally {
             set({ isLoggingOut: false })
         }
@@ -73,7 +73,7 @@ export const useAuthStore = create((set) => ({
             toast.success('Profile updated successfully')
         } catch (error) {
             console.error('Error updating profile: ', error)
-            toast.error(error.response?.data?.message || 'Failed to update profile')
+            toast.error(error.response?.data?.message || 'Problema actualizando perfil')
         } finally {
             set({ isUpdatingProfile: false })
         }
