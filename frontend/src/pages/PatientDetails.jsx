@@ -9,11 +9,13 @@ import FieldsetInput from '../components/FieldsetInput.jsx'
 import SelectInput from '../components/SelectInput.jsx'
 import FieldsetTextarea from '../components/FieldsetTextarea.jsx'
 import PageLoader from '../components/PageLoader.jsx'
+import ConfirmModal from '../components/ConfirmModal.jsx'
 
 function PatientDetails() {
   const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({})
   const [isEditing, setIsEditing] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { updatePatient, isEditingPatient, isDeletingPatient, deletePatient } = usePatientStore()
 
   const { id } = useParams()
@@ -49,8 +51,7 @@ function PatientDetails() {
     navigate('/')
   }
 
-  const handleDelete = (e) => {
-    e.preventDefault()
+  const handleDelete = () => {
     deletePatient(id)
     navigate('/')
   }
@@ -59,11 +60,12 @@ function PatientDetails() {
 
   return (
     <>
+      <ConfirmModal isOpen={isModalOpen} onCancel={() => setIsModalOpen(false)} onConfirm={handleDelete} isLoading={isDeletingPatient} />
       <div className='py-4 gap-2 md:gap-6 justify-items-center grid grid-cols-1 sm:grid-cols-4'>
         <button onClick={() => setIsEditing(wasEditing => !wasEditing)} className='btn btn-md w-35 text-xs'>{isEditing ? 'Ver' : 'Modifica'} Paciente</button>
         <div></div>
         <div></div>
-        <button onClick={handleDelete} className='btn btn-md w-35 text-xs'>{isDeletingPatient ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Borrar Paciente'}</button>
+        <button onClick={() => setIsModalOpen(true)} className='btn btn-md w-35 text-xs'>Borrar Paciente</button>
       </div>
       <form action="" onSubmit={handleSubmit} className='font-serif text-lightOcre'>
         <div className='p-6 md:p-24'>
