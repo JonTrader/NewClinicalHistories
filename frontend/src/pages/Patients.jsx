@@ -33,11 +33,11 @@ function Patients() {
 
 
   return (
-    <div className="mt-10 font-serif">
-      <div className='gap-2 md:gap-4 justify-items-center grid grid-cols-2 sm:grid-cols-3'>
+    <div className="py-5 mt-5 font-sans">
+      <div className='gap-2 md:gap-4 justify-items-center items-center grid grid-cols-2 sm:grid-cols-3'>
         <label className="input w-45">
           <Search />
-          <input onChange={handleSearch} id="search" type="search" className="grow" placeholder="Buscar" />
+          <input onChange={handleSearch} id="search" type="search" className="grow" placeholder="Buscar #ID" />
         </label>
         <div>
           {img &&
@@ -48,11 +48,11 @@ function Patients() {
         </div>
         <Link to="/new" className="btn mr-4 bg-blueSteel hover:text-lightOcre col-start-3"><Plus /></Link>
       </div>
-      <table className="mt-10 table table-xs lg:table-md text-center">
+      <table className="my-10 table table-xs lg:table-md text-center">
         <thead>
           <tr >
             <th>Nombre</th>
-            <th># Id</th>
+            <th># ID</th>
             <th>Detalles</th>
             <th className='hidden sm:block'>Odontograma</th>
             <th>Evolucion</th>

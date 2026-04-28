@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import FieldsetTextarea from '../components/FieldsetTextarea.jsx'
-import { LoaderIcon, Brain } from 'lucide-react'
+import { LoaderIcon, Brain, BrainIcon } from 'lucide-react'
 import { useEvolutionStore } from '../store/EvolutionStore.js'
 import { ax } from '../lib/axios.js'
 import toast from 'react-hot-toast'
@@ -19,8 +19,6 @@ function Evolution() {
 
   const [isGeneratingEvolution, setIsGeneratingEvolution] = useState(false)
   const [hasGeneratedEvolution, setHasGeneratedEvolution] = useState(false)
-  const [generatedEvolution, setGeneratedEvolution] = useState('')
-
   const { isUpdatingEvolution, updateEvolution } = useEvolutionStore()
 
 
@@ -64,22 +62,11 @@ function Evolution() {
 
   const generateEvolution = async (e) => {
     e.preventDefault()
-    // console.log(formData)
-    // setFormData(prevState => ({
-    //   ...prevState,
-    //   body: formData.body + 'a'
-    // }))
-    // console.log(formData)
     setIsGeneratingEvolution(true)
     try {
       const res = await ax.post(`/api/v1/ai/evolution`, formData)
-      console.log(res)
-      setGeneratedEvolution(res.data)
       setHasGeneratedEvolution(true)
-      setFormData(prevState => ({
-      ...prevState,
-      body: generatedEvolution
-    }))
+      setFormData({ body: res.data })
       toast.success("Evolucion ha sido generada")
     } catch (error) {
       console.error('Error trying to generate an evolution', error)
@@ -112,7 +99,7 @@ function Evolution() {
         <FieldsetTextarea
           size={"lg:w-200 w-80 sm:w-96 md:w-156"}
           label="Nueva evolucion"
-          text={hasGeneratedEvolution ? generatedEvolution : formData.body}
+          text={formData.body}
           onChange={(e) => setFormData({ body: e.target.value })}
         />
         <button className='btn btn-md text-lightSand hover:text-lightOcre'>{isUpdatingEvolution ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Agregar'}</button>
@@ -123,7 +110,7 @@ function Evolution() {
           <div className="flex justify-between">
             <h2 className="text-xl">Resumen</h2>
             <span className="text-xl">
-              <button className='btn' disabled={evolutionData.summary?.dateOfLastEvolution === evolutionData.update[evolutionData.update.length - 1].createdAt || hasGeneratedSummary} onClick={() => generateSummary(id)}>{isGeneratingSummary ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : 'Resumir con IA'}</button>
+              <button className='btn text-lightSand hover:text-lightOcre border-lightOcre text-xs' disabled={evolutionData.summary?.dateOfLastEvolution === evolutionData.update[evolutionData.update.length - 1].createdAt || hasGeneratedSummary} onClick={() => generateSummary(id)}>{isGeneratingSummary ? <LoaderIcon className='w-full h-5 animate-spin text-center' /> : <><BrainIcon /> Resumir Con IA</>}</button>
             </span>
           </div>
           {(summary !== '' || hasGeneratedSummary) && <FieldsetTextarea disabled size={"mt-6 w-auto h-96 textarea-success"} text={summary} />}
