@@ -65,7 +65,6 @@ export const generateEvolution = async (req, res) => {
                 temperature: 0.0
             }
         })
-        console.log(response.candidates[0].content.parts[0].text)
         return res.status(200).json(response.candidates[0].content.parts[0].text)
     } catch (error) {
         console.error('Error while generating summary by Gemini: ', error)

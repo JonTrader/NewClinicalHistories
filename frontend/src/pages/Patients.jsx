@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { usePatientStore } from '../store/PatientStore.js'
-import { Plus } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import TableSkeleton from '../components/TableSkeleton.jsx'
+import { useAuthStore } from '../store/AuthStore.js'
 
 function Patients() {
   const [searchResults, setSearchResults] = useState([])
   const [isSearching, setIsSearching] = useState(false)
   const { patients, getAllPatients, isPatientsLoading } = usePatientStore()
+  const { authUser } = useAuthStore()
+  const img = authUser?.logo
 
   useEffect(() => {
     getAllPatients()
@@ -31,25 +34,19 @@ function Patients() {
 
   return (
     <div className="mt-10 font-serif">
-      <div className='gap-2 md:gap-4 justify-items-center grid grid-cols-2 sm:grid-cols-4'>
+      <div className='gap-2 md:gap-4 justify-items-center grid grid-cols-2 sm:grid-cols-3'>
         <label className="input w-45">
-          <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <g
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              strokeWidth="2.5"
-              fill="none"
-              stroke="currentColor"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.3-4.3"></path>
-            </g>
-          </svg>
+          <Search />
           <input onChange={handleSearch} id="search" type="search" className="grow" placeholder="Buscar" />
         </label>
-        <div></div>
-        <div></div>
-        <Link to="/new" className="btn mr-4 bg-blueSteel hover:text-lightOcre"><Plus /></Link>
+        <div>
+          {img &&
+            <div className="w-30">
+              <img src={img || '/avatar.png'} alt="Logo" />
+            </div>
+          }
+        </div>
+        <Link to="/new" className="btn mr-4 bg-blueSteel hover:text-lightOcre col-start-3"><Plus /></Link>
       </div>
       <table className="mt-10 table table-xs lg:table-md text-center">
         <thead>
