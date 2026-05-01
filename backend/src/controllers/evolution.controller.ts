@@ -1,6 +1,7 @@
-import Evolution from "../models/evolution.js";
+import { type Request, type Response } from "express";
+import Evolution, { type IEvolution } from "../models/evolution.js";
 
-export const getEvolution = async (req, res) => {
+export const getEvolution = async (req: Request, res: Response):Promise<any> => {
     try {
         const { id } = req.params
         if (!id) {
@@ -14,16 +15,26 @@ export const getEvolution = async (req, res) => {
     }
 }
 
-export const updateEvolution = async (req, res) => {
+export const updateEvolution = async (req: Request, res: Response):Promise<any> => {
     try {
         const { id } = req.params
         const { body } = req.body
         if (!id) {
             return res.status(400).json({ message: 'No ID retrieved' })
         }
-        const evolution = await Evolution.find({ patient: id })
-        evolution[0].update.push({ body: body })
-        await evolution[0].save()
+        if (!body) {
+            return res.status(400).json({ message: "Body can't be empty" })
+        }
+        const evolution: IEvolution | null = await Evolution.findOne({ patient: id })
+        if (!evolution) {
+            return res.status(404).json({ message: 'Evolution record not found' })
+        }
+        if (typeof body !== 'string') {
+            return res.status(400).json({ message: 'Body must be a string' })
+        }
+
+        evolution.update.push({ body })
+        await evolution.save()
 
         return res.status(200).json(evolution)
     } catch (error) {

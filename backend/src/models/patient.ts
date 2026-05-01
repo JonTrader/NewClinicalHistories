@@ -1,8 +1,32 @@
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 import Odontogram from './odontogram.js'
 import Evolution from './evolution.js'
 
-const PatientSchema = new mongoose.Schema({
+export interface IPatient extends Document {
+    firstName: string,
+    lastName: string,
+    dob?: string,
+    birthPlace?: string,
+    idType?: string,
+    idNumber?: number,
+    gender?: string,
+    civilStatus?: string,
+    motive?: string,
+    bloodType?: string,
+    epsName?: string,
+    epsType?: string,
+    contactNumber?: string,
+    address?: string,
+    email?: string,
+    emergencyContactName?: string,
+    emergencyContactNumber?: number,
+    emergencyContactRelationship?: string,
+    medicalHistoryQuestions: string[],
+    dentalHistoryQuestions: string[],
+    doctor: mongoose.Types.ObjectId
+}
+
+const PatientSchema = new mongoose.Schema<IPatient>({
     firstName: {
         type: String,
         required: true
@@ -53,6 +77,6 @@ PatientSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
-const Patient = mongoose.model('Patient', PatientSchema)
+const Patient = mongoose.model<IPatient>('Patient', PatientSchema)
 
 export default Patient

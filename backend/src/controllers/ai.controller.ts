@@ -1,3 +1,4 @@
+import { type Request, type Response } from 'express'
 import { GoogleGenAI } from "@google/genai";
 import { env } from '../lib/env.js'
 import Evolution from '../models/evolution.js'
@@ -7,23 +8,24 @@ const ai = new GoogleGenAI({
     apiKey: GEMINI_API_KEY
 })
 
-export const generateSummary = async (req, res) => {
-    const { id } = req.params
+export const generateSummary = async (req: Request, res: Response): Promise<any> => {
     try {
-        if (!req.body.text) {
+        const { id } = req.params
+        const { text } = req.body
+        if (!text) {
             return res.status(400).json({ message: 'No text provided' })
         }
         if (!id) {
             return res.status(400).json({ message: 'No id provided' })
         }
 
-        const evoResponse = await Evolution.find({ patient: id })
-        const evolution = evoResponse[0]
+        const evolution = await Evolution.findOne({ patient: id })
         if (!evolution) {
             return res.status(404).json({ message: 'Evolution not found' })
         }
 
-        if (evolution.summary &&  evolution.summary.dateOfLastEvolution === evolution.update[evolution.update.length - 1].createdAt) {
+        const lastUpdate = evolution.update[evolution.update.length - 1]
+        if (evolution.summary && evolution.summary?.dateOfLastEvolution === lastUpdate!.createdAt) {
             return res.status(403).json({ message: 'Not allowed to generate a new summary' })
         }
 
@@ -41,13 +43,18 @@ export const generateSummary = async (req, res) => {
             }
         })
 
+        if (!response?.candidates?.length
+            || !response.candidates[0]?.content?.parts?.length
+            || !response.candidates[0].content.parts[0]?.text) {
+            return res.status(500).json({ message: 'Invalid response from AI service' })
+        }
+
         const generatedSummary = response.candidates[0].content.parts[0].text
         evolution.summary = {
             summary: generatedSummary,
-            dateOfLastEvolution: new Date(evolution.update[evolution.update.length - 1].createdAt)
+            dateOfLastEvolution: new Date(lastUpdate!.createdAt!)
         }
         await evolution.save()
-
         return res.status(200).json(generatedSummary)
     } catch (error) {
         console.error('Error while generating summary by Gemini: ', error)
@@ -55,7 +62,7 @@ export const generateSummary = async (req, res) => {
     }
 }
 
-export const generateEvolution = async (req, res) => {
+export const generateEvolution = async (req: Request, res: Response): Promise<any> => {
     try {
         if (!req.body.body) {
             return res.status(400).json({ message: 'No text provided' })
@@ -87,6 +94,13 @@ export const generateEvolution = async (req, res) => {
                 temperature: 0.0
             }
         })
+
+        if (!response?.candidates?.length
+            || !response.candidates[0]?.content?.parts?.length
+            || !response.candidates[0].content.parts[0]?.text) {
+            return res.status(500).json({ message: 'Invalid response from AI service' })
+        }
+        
         return res.status(200).json(response.candidates[0].content.parts[0].text)
     } catch (error) {
         console.error('Error while generating summary by Gemini: ', error)

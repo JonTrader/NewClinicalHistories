@@ -1,7 +1,8 @@
+import { type Request, type Response, type NextFunction} from 'express'
 import { isSpoofedBot } from '@arcjet/inspect'
 import aj from '../lib/arcjet.js'
 
-export const arcjetProtection = async (req, res, next) => {
+export const arcjetProtection = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const decision = await aj.protect(req)
         if (decision.isDenied()) {

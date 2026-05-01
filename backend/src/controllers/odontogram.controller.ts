@@ -1,6 +1,7 @@
 import Odontogram from "../models/odontogram.js";
+import { type Request, type Response } from 'express'
 
-export const getOdontogram = async (req, res) => {
+export const getOdontogram = async (req: Request, res: Response):Promise<any> => {
     try {
         const { id } = req.params
         if (!id) {
@@ -14,14 +15,17 @@ export const getOdontogram = async (req, res) => {
     }
 }
 
-export const updateOdontogram = async (req, res) => {
+export const updateOdontogram = async (req: Request, res: Response):Promise<any> => {
     try {
         const { id } = req.params
         if (!id) {
             return res.status(400).json({ message: 'No ID retrieved' })
         }
-        const odontogram = await Odontogram.find({ patient: id })
-        const updatedOdontogram = await Odontogram.findByIdAndUpdate(odontogram[0]._id, { ...req.body }, { new: true })
+        const odontogram = await Odontogram.findOne({ patient: id })
+        if (!odontogram) {
+            return res.status(400).json({ message: 'No odontogram found'})
+        }
+        const updatedOdontogram = await Odontogram.findByIdAndUpdate(odontogram._id, { ...req.body }, { new: true })
         return res.status(200).json(updatedOdontogram)
     } catch (error) {
         console.error('Error in updateOdontogram controller: ', error)

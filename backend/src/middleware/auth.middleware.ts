@@ -1,17 +1,25 @@
+import { type NextFunction, type Request, type Response } from "express";
 import jwt from 'jsonwebtoken'
 import User from '../models/user.js'
 import Patient from '../models/patient.js'
 import { env } from '../lib/env.js'
 
-export const protectRoute = async (req, res, next) => {
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+    }
+  }
+}
+
+export const protectRoute = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.cookies.jwt
         if (!token) {
-            console.log('No token provided')
-            return res.status(401).json({ message: 'Unauthorized' })
+            return res.status(401).json({ message: 'Unauthorized, no token' })
         }
 
-        const decoded = jwt.verify(token, env.JWT_SECRET)
+        const decoded = jwt.verify(token, env.JWT_SECRET) as { userId: string }
         if (!decoded) {
             console.log('Invalid token')
             return res.status(401).json({ message: 'Unauthorized' })
@@ -27,7 +35,7 @@ export const protectRoute = async (req, res, next) => {
     }
 }
 
-export const isDoctor = async (req, res, next) => {
+export const isDoctor = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const patient = await Patient.findById(id)

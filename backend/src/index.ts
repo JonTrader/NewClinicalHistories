@@ -3,7 +3,7 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { env } from './lib/env.js'
-import { connectToDatabase } from './lib/db.js'
+import connectDB from './lib/db.js'
 import authRoutes from './routes/auth.route.js'
 import patientRoutes from './routes/patient.route.js'
 import odontogramRoutes from './routes/odontogram.route.js'
@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const start = async () => {
-    await connectToDatabase()
+    await connectDB()
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`)
     })

@@ -1,14 +1,15 @@
-import User from '../models/user.js'
+import User, { type IUser } from '../models/user.js'
+import { type Request, type Response } from "express";
 import bcrypt from 'bcryptjs'
-import { generateToken } from '../lib/utils.js'
-import { sendWelcomeEmail } from '../emails/emailHandler.js'
+import { generateToken } from '../lib/jwt.js'
+import { sendWelcomeEmail } from '../lib/email/resend.js'
 import { env } from '../lib/env.js'
 import cloudinary from '../lib/cloudinary.js'
 
-export const register = async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-
+export const register = async (req: Request, res: Response): Promise<any> => {
     try {
+        const { firstName, lastName, email, password } = req.body;
+
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ message: 'All fields are required' })
         }
@@ -22,11 +23,9 @@ export const register = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email format' })
         }
 
-        // now we find email in database
-        const user = await User.findOne({ email })
+        const user: IUser | null = await User.findOne({ email })
         if (user) return res.status(400).json({ message: 'Email already exists' })
 
-        // now we encrypt password
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
 
@@ -36,6 +35,7 @@ export const register = async (req, res) => {
             firstName,
             lastName
         })
+
         if (newUser) {
             // save user first, then issue auth cookie
             const savedUser = await newUser.save()
@@ -63,14 +63,13 @@ export const register = async (req, res) => {
     }
 }
 
-export const login = async (req, res) => {
-    const { email, password } = req.body
-
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required' })
-    }
-
+export const login = async (req: Request, res: Response):Promise<any> => {
     try {
+        const { email, password } = req.body
+
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' })
+        }
         const user = await User.findOne({ email })
         if (!user) {
             return res.status(400).json({ message: 'Invalid credentials' }) // never tell user if email or password is invalid
@@ -95,16 +94,16 @@ export const login = async (req, res) => {
     }
 }
 
-export const logout = async (req, res) => {
+export const logout = async (req: Request, res: Response):Promise<any> => {
     res.cookie('jwt', '', { maxAge: 0 })
     return res.status(200).json({ message: 'Logged out successfully' })
 }
 
-export const updateProfile = async (req, res) => {
-    const { firstName, lastName, logo } = req.body;
-    const userId = req.user._id
-
+export const updateProfile = async (req: Request, res: Response):Promise<any> => {
     try {
+        const { firstName, lastName, logo } = req.body;
+        const userId = req.user._id
+
         if (!firstName || !lastName) {
             return res.status(400).json({ message: 'Both first name and last name are required.' })
         }

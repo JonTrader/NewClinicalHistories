@@ -1,9 +1,10 @@
+import { type Request, type Response } from 'express'
 import Patient from "../models/patient.js";
 import Odontogram from "../models/odontogram.js";
 import Evolution from "../models/evolution.js";
-import teeth from '../lib/odontogramHelper.js'
+import teeth from '../lib/odontogram.js'
 
-export const getAllPatients = async (req, res) => {
+export const getAllPatients = async (req: Request, res: Response): Promise<any> => {
     try {
         const userId = req.user._id
         const patients = await Patient.find({ doctor: userId })
@@ -15,7 +16,7 @@ export const getAllPatients = async (req, res) => {
     }
 }
 
-export const createPatient = async (req, res) => {
+export const createPatient = async (req: Request, res: Response): Promise<any> => {
     try {
         const userId = req.user._id
         const { firstName, lastName } = req.body
@@ -44,7 +45,7 @@ export const createPatient = async (req, res) => {
     }
 }
 
-export const editPatient = async (req, res) => {
+export const editPatient = async (req: Request, res: Response): Promise<any> => {
     try {
         const { id } = req.params;
         if (!id) {
@@ -59,7 +60,7 @@ export const editPatient = async (req, res) => {
 
 }
 
-export const deletePatient = async (req, res) => {
+export const deletePatient = async (req: Request, res: Response): Promise<any> => {
     try {
         const { id } = req.params
         if (!id) {
@@ -73,13 +74,16 @@ export const deletePatient = async (req, res) => {
     }
 }
 
-export const getPatientDetails = async (req, res) => {
+export const getPatientDetails = async (req: Request, res: Response): Promise<any> => {
     try {
         const { id } = req.params
         if (!id) {
             return res.status(400).json({ message: 'No ID retrieved' })
         }
         const patient = await Patient.findById(id)
+        if (!patient) {
+            return res.status(400).json({ message: "No patient found" })
+        }
         if (!patient.doctor.equals(req.user._id)) {
             return res.status(400).json({ message: 'You are not allowed to view/edit patient details' })
         }
