@@ -84,4 +84,4 @@ jobs:
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY-backend:$IMAGE_TAG
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG
             export ECR_REGISTRY ECR_REPOSITORY IMAGE_TAG
-            docker-compose -f ~/docker-compose.prod.yml up -d --remove-orphans
+            docker compose -f ~/docker-compose.prod.yml up -d --remove-orphans
