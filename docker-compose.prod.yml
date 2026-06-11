@@ -1,0 +1,16 @@
+services:
+  backend:
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}-backend:${IMAGE_TAG}
+    ports:
+      - "3000:3000"
+    env_file:
+      - ~/app.env
+    restart: unless-stopped
+
+  frontend:
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}-frontend:${IMAGE_TAG}
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
