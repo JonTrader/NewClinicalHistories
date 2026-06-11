@@ -60,7 +60,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG
 
       - name: Copy compose file to EC2
-        uses: appleboy/scp-action@v0
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -84,4 +84,4 @@ jobs:
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY-backend:$IMAGE_TAG
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG
             export ECR_REGISTRY ECR_REPOSITORY IMAGE_TAG
-            docker compose -f ~/docker-compose.prod.yml up -d --remove-orphans
+            docker-compose -f ~/docker-compose.prod.yml up -d --remove-orphans
