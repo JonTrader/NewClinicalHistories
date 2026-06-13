@@ -12,14 +12,12 @@ function Patients() {
   const img = authUser?.logo
 
   useEffect(() => {
-    getAllPatients({})
+    getAllPatients()
   }, [getAllPatients])
 
   const handleSearch = (e) => {
     setSearch(e.target.value)
   }
-
-  if (isPatientsLoading) return <TableSkeleton />
 
   return (
     <div className="py-5 mt-5 font-sans">
@@ -37,40 +35,46 @@ function Patients() {
         </div>
         <Link to="/new" className="btn mr-4 bg-blueSteel hover:text-lightOcre col-start-3"><Plus /></Link>
       </div>
-      <table className="my-10 table table-xs lg:table-md text-center">
-        <thead>
-          <tr >
-            <th>Nombre</th>
-            <th># ID</th>
-            <th>Detalles</th>
-            <th className='hidden sm:block'>Odontograma</th>
-            <th>Evolucion</th>
-          </tr>
-        </thead>
-        <tbody className='text-lightBone'>
-          {patients.length === 0 ? (
-            <tr>
-              <td colSpan={5} className="py-8 text-center text-gray-400">No se encontraron pacientes</td>
-            </tr>
-          ) : (patients.map((patient) => {
-            return (
-              <tr key={patient._id}>
-                <th>{`${patient.firstName} ${patient.lastName}`}</th>
-                <td>{patient?.idType || ''} {patient?.idNumber || ''}</td>
-                <td><Link className='hover:text-lightSand' to={`/details/${patient._id}`}>Ver/Editar</Link></td>
-                <td className='hidden sm:block hover:text-lightSand'><Link to={`/odontogram/${patient._id}`}>Modificar</Link></td>
-                <td><Link className='hover:text-lightSand' to={`/evolution/${patient._id}`}>Agregar</Link></td>
+      {isPatientsLoading ? (
+        <TableSkeleton />
+      ) : (
+        <>
+          <table className="my-10 table table-xs lg:table-md text-center">
+            <thead>
+              <tr >
+                <th>Nombre</th>
+                <th># ID</th>
+                <th>Detalles</th>
+                <th className='hidden sm:block'>Odontograma</th>
+                <th>Evolucion</th>
               </tr>
-            )
-          }))}
-        </tbody>
-      </table>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        total={total}
-        onPageChange={setPage}
-      />
+            </thead>
+            <tbody className='text-lightBone'>
+              {patients.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-gray-400">No se encontraron pacientes</td>
+                </tr>
+              ) : (patients.map((patient) => {
+                return (
+                  <tr key={patient._id}>
+                    <th>{`${patient.firstName} ${patient.lastName}`}</th>
+                    <td>{patient?.idType || ''} {patient?.idNumber || ''}</td>
+                    <td><Link className='hover:text-lightSand' to={`/details/${patient._id}`}>Ver/Editar</Link></td>
+                    <td className='hidden sm:block hover:text-lightSand'><Link to={`/odontogram/${patient._id}`}>Modificar</Link></td>
+                    <td><Link className='hover:text-lightSand' to={`/evolution/${patient._id}`}>Agregar</Link></td>
+                  </tr>
+                )
+              }))}
+            </tbody>
+          </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            total={total}
+            onPageChange={setPage}
+          />
+        </>
+      )}
     </div>
   )
 }

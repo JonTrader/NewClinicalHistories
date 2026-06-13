@@ -4,11 +4,20 @@ import Odontogram from "../models/odontogram.js";
 import Evolution from "../models/evolution.js";
 import teeth from '../lib/odontogram.js'
 
-export const getAllPatients = async (req: Request, res: Response): Promise<any> => {
+const DEFAULT_PAGE_SIZE = 20
+const MAX_PAGE_SIZE = 100
+
+const parsePositiveInt = (value: unknown, fallback: number): number => {
+    if (typeof value !== 'string') return fallback
+    const parsed = parseInt(value, 10)
+    return Number.isNaN(parsed) ? fallback : Math.max(1, parsed)
+}
+
+export const getAllPatients = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user._id
-        const page = Math.max(1, parseInt(req.query.page as string) || 1)
-        const limit = Math.max(1, Math.min(100, parseInt(req.query.limit as string) || 20))
+        const page = parsePositiveInt(req.query.page, 1)
+        const limit = Math.min(MAX_PAGE_SIZE, parsePositiveInt(req.query.limit, DEFAULT_PAGE_SIZE))
         const search = (req.query.search as string)?.trim() || ''
 
         const filter: Record<string, unknown> = { doctor: userId }
@@ -24,19 +33,18 @@ export const getAllPatients = async (req: Request, res: Response): Promise<any> 
                 .limit(limit)
         ])
 
-        return res.status(200).json({
+        res.status(200).json({
             patients,
             pagination: {
                 page,
                 limit,
                 total,
                 totalPages: Math.ceil(total / limit) || 1,
-                hasMore: page * limit < total,
             }
         })
     } catch (error) {
         console.error('Error in getAllPatients controller: ', error)
-        return res.status(500).json({ message: 'Internal server error trying to getAllPatients' })
+        res.status(500).json({ message: 'Internal server error trying to getAllPatients' })
     }
 }
 
