@@ -7,9 +7,33 @@ import teeth from '../lib/odontogram.js'
 export const getAllPatients = async (req: Request, res: Response): Promise<any> => {
     try {
         const userId = req.user._id
-        const patients = await Patient.find({ doctor: userId })
+        const page = Math.max(1, parseInt(req.query.page as string) || 1)
+        const limit = Math.max(1, Math.min(100, parseInt(req.query.limit as string) || 20))
+        const search = (req.query.search as string)?.trim() || ''
 
-        return res.status(200).json(patients)
+        const filter: Record<string, unknown> = { doctor: userId }
+        if (search) {
+            filter.idNumber = { $regex: search, $options: 'i' }
+        }
+
+        const [total, patients] = await Promise.all([
+            Patient.countDocuments(filter),
+            Patient.find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+        ])
+
+        return res.status(200).json({
+            patients,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit) || 1,
+                hasMore: page * limit < total,
+            }
+        })
     } catch (error) {
         console.error('Error in getAllPatients controller: ', error)
         return res.status(500).json({ message: 'Internal server error trying to getAllPatients' })

@@ -9,18 +9,46 @@ export const usePatientStore = create((set) => ({
     isDetailsLoading: true,
     isEditingPatient: false,
     isDeletingPatient: false,
+    currentPage: 1,
+    totalPages: 1,
+    total: 0,
+    itemsPerPage: 20,
+    searchTerm: '',
 
-    getAllPatients: async () => {
+    getAllPatients: async ({ page = 1, limit = 20, search = '' } = {}) => {
         set({ isPatientsLoading: true })
         try {
-            const res = await ax.get('/api/v1/patients')
-            set({ patients: res.data })
+            const params = { page, limit }
+            if (search) params.search = search
+            const res = await ax.get('/api/v1/patients', { params })
+            const data = res.data
+            if (Array.isArray(data)) {
+                set({ patients: data, currentPage: 1, totalPages: 1, total: data.length, itemsPerPage: limit, searchTerm: search })
+            } else {
+                set({
+                    patients: data.patients,
+                    currentPage: data.pagination.page,
+                    totalPages: data.pagination.totalPages,
+                    total: data.pagination.total,
+                    itemsPerPage: data.pagination.limit,
+                    searchTerm: search,
+                })
+            }
         } catch (error) {
             console.error('Error in getAllPatients store: ', error)
             toast.error(error.response?.data?.message || 'Problema al cargar pacientes')
         } finally {
             set({ isPatientsLoading: false })
         }
+    },
+
+    setPage: (page) => {
+        const state = usePatientStore.getState()
+        state.getAllPatients({ page, limit: state.itemsPerPage, search: state.searchTerm })
+    },
+
+    setSearch: (search) => {
+        usePatientStore.getState().getAllPatients({ page: 1, limit: 20, search })
     },
 
     createPatient: async (data) => {
