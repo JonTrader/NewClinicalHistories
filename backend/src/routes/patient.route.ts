@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllPatients, createPatient, editPatient, deletePatient, getPatientDetails } from '../controllers/patient.controller.js'
+import { getAllPatients, createPatient, editPatient, deletePatient, getPatientDetails, searchPatients } from '../controllers/patient.controller.js'
 import { protectRoute, isDoctor } from '../middleware/auth.middleware.js'
 import { arcjetProtection } from '../middleware/arcjet.middleware.js'
 
@@ -11,6 +11,7 @@ const router = express.Router()
 
 router.use(arcjetProtection, protectRoute)
 
+router.get('/search', searchPatients)
 router.get('/', getAllPatients)
 router.get('/:id', isDoctor, getPatientDetails)
 

@@ -4,6 +4,41 @@ import Odontogram from "../models/odontogram.js";
 import Evolution from "../models/evolution.js";
 import teeth from '../lib/odontogram.js'
 
+export const searchPatients = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { q } = req.query
+        const userId = req.user._id
+        console.log(q)
+
+        if (!q || typeof q !== 'string' || q.trim().length === 0) {
+            return res.status(400).json({ message: 'Query parameter q is required' })
+        }
+
+        const query = q.trim()
+        const regex = { $regex: query, $options: 'i' }
+
+        const conditions: any[] = [
+            { firstName: regex },
+            { lastName: regex },
+        ]
+
+        const num = Number(query)
+        if (!isNaN(num)) {
+            conditions.push({ idNumber: num })
+        }
+
+        const patients = await Patient.find({
+            doctor: userId,
+            $or: conditions
+        }).limit(5)
+
+        return res.status(200).json(patients)
+    } catch (error) {
+        console.error('Error in searchPatients controller: ', error)
+        return res.status(500).json({ message: 'Internal server error trying to searchPatients' })
+    }
+}
+
 export const getAllPatients = async (req: Request, res: Response): Promise<any> => {
     try {
         const userId = req.user._id
