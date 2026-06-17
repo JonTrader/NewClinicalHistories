@@ -2,25 +2,48 @@ import { create } from 'zustand'
 import { ax } from '../lib/axios.js'
 import toast from 'react-hot-toast'
 
-export const usePatientStore = create((set) => ({
+export const usePatientStore = create((set, get) => ({
     patients: [],
     isPatientsLoading: true,
     isCreatingPatient: false,
     isDetailsLoading: true,
     isEditingPatient: false,
     isDeletingPatient: false,
+    currentPage: 1,
+    totalPages: 1,
+    total: 0,
+    itemsPerPage: 20,
+    searchTerm: '',
 
-    getAllPatients: async () => {
+    getAllPatients: async ({ page = 1, limit = get().itemsPerPage, search = '' } = {}) => {
         set({ isPatientsLoading: true })
         try {
-            const res = await ax.get('/api/v1/patients')
-            set({ patients: res.data })
+            const params = { page, limit }
+            if (search) params.search = search
+            const { data } = await ax.get('/api/v1/patients', { params })
+            set({
+                patients: data.patients,
+                currentPage: data.pagination.page,
+                totalPages: data.pagination.totalPages,
+                total: data.pagination.total,
+                itemsPerPage: data.pagination.limit,
+                searchTerm: search,
+            })
         } catch (error) {
             console.error('Error in getAllPatients store: ', error)
             toast.error(error.response?.data?.message || 'Problema al cargar pacientes')
         } finally {
             set({ isPatientsLoading: false })
         }
+    },
+
+    setPage: (page) => {
+        const { itemsPerPage, searchTerm, getAllPatients } = get()
+        getAllPatients({ page, limit: itemsPerPage, search: searchTerm })
+    },
+
+    setSearch: (search) => {
+        get().getAllPatients({ page: 1, limit: 20, search })
     },
 
     createPatient: async (data) => {

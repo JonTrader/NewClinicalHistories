@@ -4,7 +4,15 @@ import Odontogram from "../models/odontogram.js";
 import Evolution from "../models/evolution.js";
 import teeth from '../lib/odontogram.js'
 
+const DEFAULT_PAGE_SIZE = 20
+const MAX_PAGE_SIZE = 100
 const MAX_SEARCH_QUERY_LENGTH = 100
+
+const parsePositiveInt = (value: unknown, fallback: number): number => {
+    if (typeof value !== 'string') return fallback
+    const parsed = parseInt(value, 10)
+    return Number.isNaN(parsed) ? fallback : Math.max(1, parsed)
+}
 
 function escapeRegex(value: string): string {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -50,15 +58,34 @@ export const searchPatients = async (req: Request, res: Response): Promise<any> 
     }
 }
 
-export const getAllPatients = async (req: Request, res: Response): Promise<any> => {
+export const getAllPatients = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user._id
-        const patients = await Patient.find({ doctor: userId })
+        const page = parsePositiveInt(req.query.page, 1)
+        const limit = Math.min(MAX_PAGE_SIZE, parsePositiveInt(req.query.limit, DEFAULT_PAGE_SIZE))
 
-        return res.status(200).json(patients)
+        const filter: Record<string, unknown> = { doctor: userId }
+
+        const [total, patients] = await Promise.all([
+            Patient.countDocuments(filter),
+            Patient.find(filter)
+                .sort({ createdAt: -1 })
+                .skip((page - 1) * limit)
+                .limit(limit)
+        ])
+
+        res.status(200).json({
+            patients,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit) || 1,
+            }
+        })
     } catch (error) {
         console.error('Error in getAllPatients controller: ', error)
-        return res.status(500).json({ message: 'Internal server error trying to getAllPatients' })
+        res.status(500).json({ message: 'Internal server error trying to getAllPatients' })
     }
 }
 
