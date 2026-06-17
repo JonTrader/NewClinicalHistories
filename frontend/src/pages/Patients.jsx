@@ -1,31 +1,30 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { usePatientStore } from '../store/PatientStore.js'
-import { Plus, Search } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import TableSkeleton from '../components/TableSkeleton.jsx'
 import Pagination from '../components/Pagination.jsx'
 import { useAuthStore } from '../store/AuthStore.js'
+import { PatientSearchDropdown } from '../components/PatientSearchDropdown.jsx'
 
 function Patients() {
-  const { patients, getAllPatients, isPatientsLoading, currentPage, totalPages, total, searchTerm, setPage, setSearch } = usePatientStore()
+  const { patients, getAllPatients, isPatientsLoading, currentPage, totalPages, total, setPage } = usePatientStore()
   const { authUser } = useAuthStore()
+  const navigate = useNavigate()
   const img = authUser?.logo
 
   useEffect(() => {
     getAllPatients()
   }, [getAllPatients])
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value)
+  const handleSelectPatient = (id) => {
+    navigate(`/details/${id}`)
   }
 
   return (
     <div className="py-5 mt-5 font-sans">
       <div className='gap-2 md:gap-4 justify-items-center items-center grid grid-cols-2 sm:grid-cols-3'>
-        <label className="input w-45">
-          <Search />
-          <input onChange={handleSearch} id="search" type="search" className="grow" placeholder="Buscar #ID" value={searchTerm} />
-        </label>
+        <PatientSearchDropdown onSelect={handleSelectPatient} />
         <div>
           {img &&
             <div className="w-30">

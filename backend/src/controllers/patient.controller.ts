@@ -6,6 +6,7 @@ import teeth from '../lib/odontogram.js'
 
 const DEFAULT_PAGE_SIZE = 20
 const MAX_PAGE_SIZE = 100
+const MAX_SEARCH_QUERY_LENGTH = 100
 
 const parsePositiveInt = (value: unknown, fallback: number): number => {
     if (typeof value !== 'string') return fallback
@@ -13,17 +14,57 @@ const parsePositiveInt = (value: unknown, fallback: number): number => {
     return Number.isNaN(parsed) ? fallback : Math.max(1, parsed)
 }
 
+function escapeRegex(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+export const searchPatients = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { q } = req.query
+        const userId = req.user._id
+
+        if (!q || typeof q !== 'string' || q.trim().length === 0) {
+            return res.status(400).json({ message: 'Query parameter q is required' })
+        }
+
+        const query = q.trim()
+
+        if (query.length > MAX_SEARCH_QUERY_LENGTH) {
+            return res.status(400).json({ message: `Query must be at most ${MAX_SEARCH_QUERY_LENGTH} characters` })
+        }
+
+        const escapedQuery = escapeRegex(query)
+        const regex = { $regex: escapedQuery, $options: 'i' }
+
+        const conditions: any[] = [
+            { firstName: regex },
+            { lastName: regex },
+        ]
+
+        const num = Number(query)
+        if (!isNaN(num)) {
+            conditions.push({ idNumber: num })
+        }
+
+        const patients = await Patient.find({
+            doctor: userId,
+            $or: conditions
+        }).limit(5)
+
+        return res.status(200).json(patients)
+    } catch (error) {
+        console.error('Error in searchPatients controller: ', error)
+        return res.status(500).json({ message: 'Internal server error trying to searchPatients' })
+    }
+}
+
 export const getAllPatients = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user._id
         const page = parsePositiveInt(req.query.page, 1)
         const limit = Math.min(MAX_PAGE_SIZE, parsePositiveInt(req.query.limit, DEFAULT_PAGE_SIZE))
-        const search = (req.query.search as string)?.trim() || ''
 
         const filter: Record<string, unknown> = { doctor: userId }
-        if (search) {
-            filter.idNumber = { $regex: search, $options: 'i' }
-        }
 
         const [total, patients] = await Promise.all([
             Patient.countDocuments(filter),
