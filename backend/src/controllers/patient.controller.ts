@@ -4,18 +4,29 @@ import Odontogram from "../models/odontogram.js";
 import Evolution from "../models/evolution.js";
 import teeth from '../lib/odontogram.js'
 
+const MAX_SEARCH_QUERY_LENGTH = 100
+
+function escapeRegex(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 export const searchPatients = async (req: Request, res: Response): Promise<any> => {
     try {
         const { q } = req.query
         const userId = req.user._id
-        console.log(q)
 
         if (!q || typeof q !== 'string' || q.trim().length === 0) {
             return res.status(400).json({ message: 'Query parameter q is required' })
         }
 
         const query = q.trim()
-        const regex = { $regex: query, $options: 'i' }
+
+        if (query.length > MAX_SEARCH_QUERY_LENGTH) {
+            return res.status(400).json({ message: `Query must be at most ${MAX_SEARCH_QUERY_LENGTH} characters` })
+        }
+
+        const escapedQuery = escapeRegex(query)
+        const regex = { $regex: escapedQuery, $options: 'i' }
 
         const conditions: any[] = [
             { firstName: regex },

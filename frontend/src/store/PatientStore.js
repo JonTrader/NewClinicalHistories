@@ -4,8 +4,6 @@ import toast from 'react-hot-toast'
 
 export const usePatientStore = create((set) => ({
     patients: [],
-    searchResults: [],
-    isSearchLoading: false,
     isPatientsLoading: true,
     isCreatingPatient: false,
     isDetailsLoading: true,
@@ -61,24 +59,6 @@ export const usePatientStore = create((set) => ({
             toast.error(error.response?.data?.message || 'Problema al actualizar paciente')
         } finally {
             set({ isEditingPatient: false })
-        }
-    },
-
-    searchPatients: async (query) => {
-        if (!query || query.trim().length === 0) {
-            set({ searchResults: [] })
-            return
-        }
-        set({ isSearchLoading: true })
-        try {
-            const res = await ax.get(`/api/v1/patients/search?q=${encodeURIComponent(query.trim())}`)
-            set({ searchResults: res.data })
-        } catch (error) {
-            console.error('Error in searchPatients store: ', error)
-            toast.error(error.response?.data?.message || 'Problema al buscar pacientes')
-            set({ searchResults: [] })
-        } finally {
-            set({ isSearchLoading: false })
         }
     },
 
