@@ -171,7 +171,7 @@ function Evolution() {
           <h2 className="font-display text-xl text-lightBone">Resumen</h2>
           <button
             type="button"
-            disabled={isSummaryUpToDate || hasGeneratedSummary || updates.length === 0}
+            disabled={isSummaryUpToDate || hasGeneratedSummary || updates.length <= 1}
             onClick={generateSummary}
             className="btn btn-md bg-blueDeep text-lightBone border-blueSteel hover:border-lightOcre hover:text-lightOcre font-body inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
