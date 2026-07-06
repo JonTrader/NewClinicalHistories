@@ -1,36 +1,50 @@
-function InputFieldset({ label, onChange, value, disabled = false, required = false, type = 'text' }) {
-    let styleClass = `input input-sm ${required ? 'validator' : ''}`
-    const isTypeTel = type === 'tel'
+function FieldsetInput({ label, onChange, value, disabled = false, required = false, type = 'text' }) {
+    const isTel = type === 'tel'
+    const inputClasses = [
+        'w-full',
+        'bg-blueDeep',
+        'text-lightBone',
+        'border',
+        'border-blueSteel',
+        'rounded-md',
+        'px-3',
+        'py-2',
+        'text-sm',
+        'font-body',
+        'placeholder:text-blueSky/50',
+        'focus:outline-none',
+        'focus:border-blueSky',
+        'focus:ring-1',
+        'focus:ring-blueSky',
+        'disabled:opacity-60',
+        'disabled:cursor-not-allowed',
+        'transition-colors',
+        'duration-150',
+        isTel ? 'tabular-nums' : ''
+    ].join(' ')
 
-    const typeTel = (
-        <fieldset className="fieldset w-3/4">
-            <p className="label">{label}</p>
-            <label className="input input-sm">
-                <input
-                    disabled={disabled}
-                    type='tel'
-                    className="tabular-nums"
-                    placeholder=""
-                    pattern="[0-9]*"
-                    minLength="1"
-                    maxLength="20"
-                    onChange={onChange}
-                    value={value}
-                />
-            </label>
+    return (
+        <fieldset className="fieldset w-full">
+            <legend className="label text-xs font-medium text-lightOcre uppercase tracking-wide mb-1">
+                {label}
+                {required && <span className="text-lightOcre ml-0.5">*</span>}
+            </legend>
+            <input
+                disabled={disabled}
+                required={required}
+                type={isTel ? 'tel' : type}
+                pattern={isTel ? '[0-9]*' : undefined}
+                minLength={isTel ? 1 : undefined}
+                maxLength={isTel ? 20 : undefined}
+                className={inputClasses}
+                onChange={onChange}
+                value={value}
+                aria-required={required}
+            />
         </fieldset>
     )
-
-    const notTypeTel = (
-        < fieldset className="fieldset w-3/4" >
-            <p className="label">{label}</p>
-            <input disabled={disabled} required={required} type={type} className={styleClass} onChange={onChange} value={value} />
-        </fieldset >
-    )
-
-    return !isTypeTel ? notTypeTel : typeTel
 }
 
-export default InputFieldset
+export default FieldsetInput
 
 
