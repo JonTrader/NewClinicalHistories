@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { usePatientStore } from '../store/PatientStore.js'
-import { Plus, Users } from 'lucide-react'
+import { Plus, Users, User, Smile, FileText } from 'lucide-react'
 import TableSkeleton from '../components/TableSkeleton.jsx'
 import Pagination from '../components/Pagination.jsx'
 import { useAuthStore } from '../store/AuthStore.js'
@@ -75,15 +75,24 @@ function Patients() {
             </div>
           ) : (
             <>
-              <div className="rounded-lg border border-blueSteel overflow-hidden">
-                <table className="w-full text-left text-sm">
+              <div className="rounded-lg border border-blueSteel overflow-hidden overflow-x-auto">
+                <table className="w-full min-w-[16rem] text-center text-sm">
                   <thead className="bg-blueDeep text-lightBone text-xs uppercase tracking-wide">
                     <tr>
-                      <th className="px-4 py-3 font-medium">Nombre</th>
-                      <th className="px-4 py-3 font-medium"># ID</th>
-                      <th className="px-4 py-3 font-medium">Detalles</th>
-                      <th className="hidden sm:table-cell px-4 py-3 font-medium">Odontograma</th>
-                      <th className="px-4 py-3 font-medium">Evolución</th>
+                      <th className="px-2 sm:px-4 py-3 font-medium text-left whitespace-nowrap">Nombre</th>
+                      <th className="hidden sm:table-cell px-2 sm:px-4 py-3 font-medium whitespace-nowrap"># ID</th>
+                      <th className="px-2 sm:px-4 py-3 font-medium whitespace-nowrap">
+                        <User className="w-4 h-4 sm:hidden mx-auto" />
+                        <span className="hidden sm:inline">Detalles</span>
+                      </th>
+                      <th className="px-2 sm:px-4 py-3 font-medium whitespace-nowrap">
+                        <Smile className="w-4 h-4 sm:hidden mx-auto" />
+                        <span className="hidden sm:inline">Odontograma</span>
+                      </th>
+                      <th className="px-2 sm:px-4 py-3 font-medium whitespace-nowrap">
+                        <FileText className="w-4 h-4 sm:hidden mx-auto" />
+                        <span className="hidden sm:inline">Evolución</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-blueSteel">
@@ -92,34 +101,43 @@ function Patients() {
                         key={patient._id}
                         className="group bg-blueSteel/20 hover:bg-blueSteel/40 transition-colors duration-150"
                       >
-                        <td className="px-4 py-3 font-medium text-lightBone">
+                        <td className="px-2 sm:px-4 py-3 font-medium text-lightBone text-left">
                           {patient.firstName} {patient.lastName}
                         </td>
-                        <td className="px-4 py-3 font-mono text-lightOcre">
+                        <td className="hidden sm:table-cell px-2 sm:px-4 py-3 font-mono text-lightOcre">
                           {patient?.idType || ''} {patient?.idNumber || ''}
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-2 sm:px-4 py-3">
                           <Link
                             to={`/details/${patient._id}`}
-                            className="text-blueSky hover:text-lightBone transition-colors duration-150"
+                            aria-label="Ver detalles del paciente"
+                            title="Ver detalles"
+                            className="text-blueSky hover:text-lightBone transition-colors duration-150 inline-flex items-center justify-center"
                           >
-                            Ver / editar
+                            <User className="w-4 h-4 sm:hidden" />
+                            <span className="hidden sm:inline">Ver / editar</span>
                           </Link>
                         </td>
-                        <td className="hidden sm:table-cell px-4 py-3">
+                        <td className="px-2 sm:px-4 py-3">
                           <Link
                             to={`/odontogram/${patient._id}`}
-                            className="text-blueSky hover:text-lightBone transition-colors duration-150"
+                            aria-label="Modificar odontograma"
+                            title="Modificar odontograma"
+                            className="text-blueSky hover:text-lightBone transition-colors duration-150 inline-flex items-center justify-center"
                           >
-                            Modificar
+                            <Smile className="w-4 h-4 sm:hidden" />
+                            <span className="hidden sm:inline">Modificar</span>
                           </Link>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-2 sm:px-4 py-3">
                           <Link
                             to={`/evolution/${patient._id}`}
-                            className="text-blueSky hover:text-lightBone transition-colors duration-150"
+                            aria-label="Agregar evolución"
+                            title="Agregar evolución"
+                            className="text-blueSky hover:text-lightBone transition-colors duration-150 inline-flex items-center justify-center"
                           >
-                            Agregar
+                            <FileText className="w-4 h-4 sm:hidden" />
+                            <span className="hidden sm:inline">Agregar</span>
                           </Link>
                         </td>
                       </tr>

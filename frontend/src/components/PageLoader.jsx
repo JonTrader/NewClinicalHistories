@@ -2,7 +2,7 @@ import { LoaderIcon } from 'lucide-react'
 
 function PageLoader() {
   return (
-    <div className='flex flex-1 items-center bg-blueSteel justify-center'>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-blueSteel'>
         <LoaderIcon className="text-lightOcre size-12 animate-spin" aria-label="Cargando" />
     </div>
   )
