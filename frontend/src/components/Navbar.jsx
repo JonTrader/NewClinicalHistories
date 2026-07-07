@@ -1,20 +1,41 @@
 import { useAuthStore } from '../store/AuthStore.js'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router'
 import { Settings } from 'lucide-react'
 
 function Navbar() {
     const { logout } = useAuthStore()
 
+    const linkBase = "text-sm font-body transition-colors duration-150 hover:text-lightOcre focus:outline-none focus-visible:ring-2 focus-visible:ring-blueSky rounded-sm"
+    const navLinkActive = "text-lightOcre"
+    const navLinkInactive = "text-lightBone"
+
     return (
-        <div className="font-serif navbar px-8 sm:px-20 bg-blueDeep shadow-sm text-lightBone">
+        <nav className="navbar px-6 sm:px-12 lg:px-20 bg-blueDeep text-lightBone shadow-sm">
             <div className="navbar-start">
-                <Link to="/" className="text-lightBone text-sm hover:cursor-pointer hover:text-lightOcre hover:scale-110 transition-all">Pacientes</Link>
+                <NavLink
+                    to="/"
+                    className={({ isActive }) => `${linkBase} font-display text-base ${isActive ? navLinkActive : navLinkInactive}`}
+                >
+                    Pacientes
+                </NavLink>
             </div>
-            <div className="navbar-end">
-                <a onClick={logout} className="text-sm hover:cursor-pointer hover:scale-110 hover:text-lightOcre transition-all">Logout</a>
-                <Link to="/profile" className="ml-4 hover:cursor-pointer hover:scale-110 hover:text-lightOcre transition-all"><Settings /></Link>
+            <div className="navbar-end gap-4 sm:gap-6">
+                <button
+                    type="button"
+                    onClick={logout}
+                    className={`${linkBase} cursor-pointer`}
+                >
+                    Cerrar sesión
+                </button>
+                <NavLink
+                    to="/profile"
+                    title="Configuración"
+                    className={({ isActive }) => `${linkBase} ${isActive ? navLinkActive : navLinkInactive}`}
+                >
+                    <Settings className="w-5 h-5" />
+                </NavLink>
             </div>
-        </div>
+        </nav>
     )
 }
 

@@ -156,15 +156,15 @@ export function PatientSearchDropdown({ onSelect }) {
       aria-haspopup="listbox"
       aria-controls="search-results-list"
     >
-      <label className="input w-45">
-        <Search />
+      <label className="flex items-center gap-2 w-full sm:w-56 bg-blueDeep text-lightBone border border-blueSteel rounded-md px-3 py-2 focus-within:border-blueSky focus-within:ring-1 focus-within:ring-blueSky transition-colors duration-150">
+        <Search className="w-4 h-4 text-lightOcre shrink-0" />
         <input
           ref={inputRef}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={handleFocus}
           type="search"
-          className="grow"
+          className="grow bg-transparent text-sm font-body placeholder:text-blueSky/50 focus:outline-none"
           placeholder="Buscar paciente..."
           value={searchQuery}
           autoComplete="off"
@@ -178,15 +178,15 @@ export function PatientSearchDropdown({ onSelect }) {
         <ul
           id="search-results-list"
           role="listbox"
-          className="absolute z-50 mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-60 overflow-y-auto"
+          className="absolute z-50 mt-2 w-full min-w-[16rem] bg-blueDeep rounded-lg shadow-xl border border-blueSteel max-h-60 overflow-y-auto font-body"
         >
           {!hasEnoughChars ? (
-            <li className="px-3 py-2 text-sm text-gray-400 text-center">
+            <li className="px-3 py-2 text-sm text-lightOcre/70 text-center">
               Escribe al menos {MIN_QUERY_LENGTH} caracteres
             </li>
           ) : isSearchLoading ? (
             <li className="flex justify-center py-3" role="option">
-              <LoaderIcon className="w-5 h-5 animate-spin text-gray-400" />
+              <LoaderIcon className="w-5 h-5 animate-spin text-lightOcre" />
             </li>
           ) : searchResults.length > 0 ? (
             searchResults.map((patient, index) => (
@@ -199,21 +199,21 @@ export function PatientSearchDropdown({ onSelect }) {
                 <button
                   type="button"
                   className={`w-full px-3 py-2 text-left text-sm transition-colors cursor-pointer ${
-                    index === activeIndex ? 'bg-blue-50' : 'hover:bg-blue-50'
+                    index === activeIndex ? 'bg-blueSteel text-lightBone' : 'text-lightBone hover:bg-blueSteel'
                   }`}
                   onClick={() => handleSelect(patient._id)}
                 >
-                  <span className="font-medium text-gray-800">
+                  <span className="font-medium">
                     {patient.firstName} {patient.lastName}
                   </span>
-                  <span className="ml-2 text-gray-500 text-xs">
+                  <span className="ml-2 text-lightOcre text-xs font-mono">
                     {patient?.idType || ''} {patient?.idNumber || ''}
                   </span>
                 </button>
               </li>
             ))
           ) : (
-            <li className="px-3 py-2 text-sm text-gray-400 text-center" role="option">
+            <li className="px-3 py-2 text-sm text-lightOcre/70 text-center" role="option">
               Sin resultados
             </li>
           )}

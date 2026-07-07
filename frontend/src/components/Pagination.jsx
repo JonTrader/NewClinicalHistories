@@ -24,14 +24,15 @@ function Pagination({
 
   if (totalPages <= 1) return null
 
-  const activeBtn = 'join-item btn btn-sm text-lightOcre'
-  const defaultBtn = 'join-item btn btn-sm'
+  const activeBtn = 'join-item btn btn-sm bg-lightOcre text-blueDeep border-lightOcre hover:bg-lightSand font-body'
+  const defaultBtn = 'join-item btn btn-sm bg-blueSteel text-lightBone border-blueSteel hover:bg-blueDeep hover:text-lightOcre hover:border-lightOcre font-body'
+  const disabledBtn = 'join-item btn btn-sm btn-disabled bg-blueDeep-100 border-blueSteel text-lightBone/50 font-body'
 
   return (
-    <div className="flex flex-col items-center gap-2 mt-8 mb-16">
+    <div className="flex flex-col items-center gap-2 mt-10 mb-8 font-body">
       <div className="join" role="navigation" aria-label="Paginación">
         <button
-          className={defaultBtn}
+          className={currentPage <= 1 ? disabledBtn : defaultBtn}
           disabled={currentPage <= 1}
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Página anterior"
@@ -41,7 +42,7 @@ function Pagination({
         {start > 1 && (
           <>
             <button className={defaultBtn} onClick={() => onPageChange(1)} aria-label="Ir a página 1">1</button>
-            {start > 2 && <span className="join-item btn btn-sm btn-disabled" aria-hidden="true">...</span>}
+            {start > 2 && <span className={disabledBtn} aria-hidden="true">...</span>}
           </>
         )}
         {pages.map((p) => (
@@ -57,12 +58,12 @@ function Pagination({
         ))}
         {end < totalPages && (
           <>
-            {end < totalPages - 1 && <span className="join-item btn btn-sm btn-disabled" aria-hidden="true">...</span>}
+            {end < totalPages - 1 && <span className={disabledBtn} aria-hidden="true">...</span>}
             <button className={defaultBtn} onClick={() => onPageChange(totalPages)} aria-label={`Ir a página ${totalPages}`}>{totalPages}</button>
           </>
         )}
         <button
-          className={defaultBtn}
+          className={currentPage >= totalPages ? disabledBtn : defaultBtn}
           disabled={currentPage >= totalPages}
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Página siguiente"
@@ -71,7 +72,7 @@ function Pagination({
         </button>
       </div>
       {typeof total === 'number' && (
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-lightOcre/70">
           Página {currentPage} de {totalPages} ({total} pacientes)
         </p>
       )}

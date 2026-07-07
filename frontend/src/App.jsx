@@ -16,11 +16,13 @@ import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 
 const MainLayout = () => (
-  <>
+  <div className="flex flex-col min-h-screen">
     <Navbar />
-    <Outlet />
+    <main className="flex-1">
+      <Outlet />
+    </main>
     <Footer />
-  </>
+  </div>
 )
 
 function App() {
