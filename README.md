@@ -1,6 +1,6 @@
 # Clinical Patient Management System
 
-A full-stack web application built for dental professionals to manage patient records, odontograms, and clinical evolutions — with AI-powered assistance powered by Google Gemini.
+A full-stack web application built for dental professionals to manage patient records, odontograms, and clinical evolutions - with AI-powered assistance powered by Google Gemini.
 
 🔗 **Live Demo:** https://newclinicalhistories-smlxb.sevalla.app/
 
@@ -12,8 +12,8 @@ This application is designed specifically for dentists and dental clinics. After
 
 The app features two AI-powered tools on the patient evolution page:
 
-- **Keyword-to-Evolution Generator** — the dentist types a few keywords into the new evolution text area and Gemini generates a fully written clinical evolution entry, using few-shot prompting trained on real dental record examples to match the correct tone and terminology.
-- **Evolution Summary Generator** — with one click, Gemini reads all of a patient's recorded evolutions and produces a concise clinical summary, helping dentists quickly review a patient's full history at a glance.
+- **Keyword-to-Evolution Generator** - the dentist types a few keywords into the new evolution text area and Gemini generates a fully written clinical evolution entry, using few-shot prompting trained on real dental record examples to match the correct tone and terminology.
+- **Evolution Summary Generator** - with one click, Gemini reads all of a patient's recorded evolutions and produces a concise clinical summary, helping dentists quickly review a patient's full history at a glance.
 
 ---
 
@@ -32,10 +32,11 @@ Feel free to create a new patient or view/edit existing patients. Please be resp
 
 ## Tech Stack
 
-- **Frontend:** React.js, Tailwind CSS
-- **Backend:** Node.js, Express.js
-- **Authentication:** JWT with server-side httpOnly cookies
+- **Frontend:** React 19, Vite, Zustand, Tailwind CSS, DaisyUI
+- **Backend:** Node.js, Express, TypeScript, Mongoose / MongoDB
+- **Authentication:** JWT with httpOnly cookies
 - **AI:** Google Gemini API (few-shot prompting)
+- **Other:** Arcjet (rate limiting / bot protection), Cloudinary (clinic logo), Resend (welcome email)
 
 ---
 
@@ -45,7 +46,7 @@ Follow these steps to run the project on your local machine:
 
 ### Prerequisites
 
-- Node.js v18 or higher
+- Node.js v20 or higher
 - A MongoDB connection URI
 - A Google Gemini API key
 
@@ -61,21 +62,21 @@ Follow these steps to run the project on your local machine:
    cd NewClinicalHistories
    ```
 
-3. **Install server dependencies**
+3. **Install backend dependencies**
    ```bash
-   cd server
+   cd backend
    npm install
    ```
 
-4. **Install client dependencies**
+4. **Install frontend dependencies**
    ```bash
-   cd ../client
+   cd ../frontend
    npm install
    ```
 
 5. **Set up environment variables**
 
-   Create a `.env` file in the `server` directory and add the following:
+   Create a `.env` file in the `backend` directory and add the following:
    ```
    RESEND_API_KEY=
    EMAIL_FROM=
@@ -95,13 +96,13 @@ Follow these steps to run the project on your local machine:
 
 6. **Start the backend server**
    ```bash
-   cd ../server
+   cd ../backend
    npm run dev
    ```
 
 7. **Start the frontend**
    ```bash
-   cd ../client
+   cd ../frontend
    npm run dev
    ```
 
