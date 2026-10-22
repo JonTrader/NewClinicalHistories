@@ -6,7 +6,7 @@ import { createApp } from '../app.js'
 import Odontogram from '../models/odontogram.js'
 import Evolution from '../models/evolution.js'
 import { connectTestDB, clearTestDB, disconnectTestDB } from './helpers/mongodb.js'
-import { registerAndLogin } from './helpers/auth.js'
+import { minimalPatientBody, registerDoctor } from './helpers/patients.js'
 import { resetExternalMocks } from './helpers/mocks.js'
 
 /**
@@ -23,32 +23,6 @@ import { resetExternalMocks } from './helpers/mocks.js'
  */
 
 let app: Express
-let emailSeq = 0
-
-function uniqueEmail(prefix = 'pat'): string {
-    emailSeq += 1
-    return `${prefix}.${emailSeq}.${Date.now()}@example.com`
-}
-
-/** Minimal body that passes Mongoose required fields on Patient. */
-function minimalPatientBody(overrides: Record<string, unknown> = {}) {
-    return {
-        firstName: 'Ana',
-        lastName: 'Garcia',
-        medicalHistoryQuestions: ['No refiere'],
-        dentalHistoryQuestions: ['No refiere'],
-        ...overrides,
-    }
-}
-
-async function registerDoctor(prefix: string) {
-    return registerAndLogin(app, {
-        firstName: 'Doc',
-        lastName: prefix,
-        email: uniqueEmail(prefix),
-        password: 'password123',
-    })
-}
 
 describe('Patients API', () => {
     beforeAll(async () => {
@@ -74,7 +48,7 @@ describe('Patients API', () => {
         })
 
         it('returns 400 when firstName or lastName is missing', async () => {
-            const { agent } = await registerDoctor('create-missing')
+            const { agent } = await registerDoctor(app, 'create-missing')
 
             const missingFirst = await agent.post('/api/v1/patients').send({
                 lastName: 'Garcia',
@@ -98,7 +72,7 @@ describe('Patients API', () => {
         })
 
         it('creates patient forcing doctor to caller, with odontogram and evolution', async () => {
-            const { agent, user } = await registerDoctor('create-ok')
+            const { agent, user } = await registerDoctor(app, 'create-ok')
             const otherDoctorId = new mongoose.Types.ObjectId().toString()
 
             const res = await agent.post('/api/v1/patients').send(
@@ -128,8 +102,8 @@ describe('Patients API', () => {
 
     describe('GET /api/v1/patients', () => {
         it('returns only the caller\'s patients', async () => {
-            const doctorA = await registerDoctor('list-a')
-            const doctorB = await registerDoctor('list-b')
+            const doctorA = await registerDoctor(app, 'list-a')
+            const doctorB = await registerDoctor(app, 'list-b')
 
             const own = await doctorA.agent
                 .post('/api/v1/patients')
@@ -152,7 +126,7 @@ describe('Patients API', () => {
         })
 
         it('defaults page size to 20 and caps limit at 100', async () => {
-            const { agent } = await registerDoctor('list-page')
+            const { agent } = await registerDoctor(app, 'list-page')
 
             const created = await agent
                 .post('/api/v1/patients')
@@ -178,7 +152,7 @@ describe('Patients API', () => {
 
     describe('GET /api/v1/patients/search', () => {
         it('returns 400 when q is missing or empty', async () => {
-            const { agent } = await registerDoctor('search-empty')
+            const { agent } = await registerDoctor(app, 'search-empty')
 
             const missing = await agent.get('/api/v1/patients/search')
             expect(missing.status).toBe(400)
@@ -190,7 +164,7 @@ describe('Patients API', () => {
         })
 
         it('returns 400 when q is longer than 100 characters', async () => {
-            const { agent } = await registerDoctor('search-long')
+            const { agent } = await registerDoctor(app, 'search-long')
             const q = 'a'.repeat(101)
 
             const res = await agent.get('/api/v1/patients/search').query({ q })
@@ -201,8 +175,8 @@ describe('Patients API', () => {
         })
 
         it('matches own patients by name and excludes other doctors\' patients', async () => {
-            const doctorA = await registerDoctor('search-a')
-            const doctorB = await registerDoctor('search-b')
+            const doctorA = await registerDoctor(app, 'search-a')
+            const doctorB = await registerDoctor(app, 'search-b')
 
             const own = await doctorA.agent
                 .post('/api/v1/patients')
@@ -225,8 +199,8 @@ describe('Patients API', () => {
         })
 
         it('matches own patient by idNumber when q is numeric', async () => {
-            const doctorA = await registerDoctor('search-id-a')
-            const doctorB = await registerDoctor('search-id-b')
+            const doctorA = await registerDoctor(app, 'search-id-a')
+            const doctorB = await registerDoctor(app, 'search-id-b')
             const idNumber = 987654321
 
             const own = await doctorA.agent
@@ -250,8 +224,8 @@ describe('Patients API', () => {
 
     describe('isDoctor authz on GET/PUT/DELETE /api/v1/patients/:id', () => {
         it('returns 403 for a foreign patient', async () => {
-            const doctorA = await registerDoctor('authz-a')
-            const doctorB = await registerDoctor('authz-b')
+            const doctorA = await registerDoctor(app, 'authz-a')
+            const doctorB = await registerDoctor(app, 'authz-b')
 
             const created = await doctorB.agent
                 .post('/api/v1/patients')
@@ -275,7 +249,7 @@ describe('Patients API', () => {
         })
 
         it('returns 404 when patient id is missing from DB', async () => {
-            const { agent } = await registerDoctor('authz-404')
+            const { agent } = await registerDoctor(app, 'authz-404')
             const missingId = new mongoose.Types.ObjectId().toString()
 
             const getRes = await agent.get(`/api/v1/patients/${missingId}`)
@@ -292,7 +266,7 @@ describe('Patients API', () => {
         })
 
         it('returns 500 for invalid ObjectId (current CastError handling)', async () => {
-            const { agent } = await registerDoctor('authz-invalid')
+            const { agent } = await registerDoctor(app, 'authz-invalid')
             const invalidId = 'not-a-valid-objectid'
 
             const getRes = await agent.get(`/api/v1/patients/${invalidId}`)
@@ -303,7 +277,7 @@ describe('Patients API', () => {
 
     describe('DELETE /api/v1/patients/:id', () => {
         it('removes patient and cascades odontogram and evolution', async () => {
-            const { agent } = await registerDoctor('delete-ok')
+            const { agent } = await registerDoctor(app, 'delete-ok')
 
             const created = await agent
                 .post('/api/v1/patients')
@@ -333,8 +307,8 @@ describe('Patients API', () => {
          * A future fix should reject or strip body.doctor; flip this expectation then.
          */
         it('currently allows transferring doctor via body.doctor', async () => {
-            const doctorA = await registerDoctor('mass-a')
-            const doctorB = await registerDoctor('mass-b')
+            const doctorA = await registerDoctor(app, 'mass-a')
+            const doctorB = await registerDoctor(app, 'mass-b')
 
             const created = await doctorA.agent
                 .post('/api/v1/patients')
