@@ -39,7 +39,7 @@
     "moduleResolution": "nodenext",
     "skipLibCheck": true,
   },
-  "exclude": ["dist", "vitest.config.ts"],
+  "exclude": ["dist", "vitest.config.ts", "src/__tests__"],
   "ts-node": {
     "esm": true
   }
