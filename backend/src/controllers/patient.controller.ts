@@ -8,6 +8,29 @@ const DEFAULT_PAGE_SIZE = 20
 const MAX_PAGE_SIZE = 100
 const MAX_SEARCH_QUERY_LENGTH = 100
 
+const EDITABLE_PATIENT_FIELDS = [
+    'firstName',
+    'lastName',
+    'dob',
+    'birthPlace',
+    'idType',
+    'idNumber',
+    'gender',
+    'civilStatus',
+    'motive',
+    'bloodType',
+    'epsName',
+    'epsType',
+    'contactNumber',
+    'address',
+    'email',
+    'emergencyContactName',
+    'emergencyContactNumber',
+    'emergencyContactRelationship',
+    'medicalHistoryQuestions',
+    'dentalHistoryQuestions',
+] as const
+
 const parsePositiveInt = (value: unknown, fallback: number): number => {
     if (typeof value !== 'string') return fallback
     const parsed = parseInt(value, 10)
@@ -124,7 +147,13 @@ export const editPatient = async (req: Request, res: Response): Promise<any> => 
         if (!id) {
             return res.status(400).json({ message: 'No ID retrieved' })
         }
-        const patient = await Patient.findByIdAndUpdate(id, { ...req.body }, { new: true })
+        const update: Record<string, unknown> = {}
+        for (const key of EDITABLE_PATIENT_FIELDS) {
+            if (Object.prototype.hasOwnProperty.call(req.body, key)) {
+                update[key] = req.body[key]
+            }
+        }
+        const patient = await Patient.findByIdAndUpdate(id, update, { new: true })
         return res.status(200).json(patient)
     } catch (error) {
         console.error('Error in editPatient controller: ', error)
