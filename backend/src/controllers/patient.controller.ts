@@ -1,8 +1,8 @@
 import { type Request, type Response } from 'express'
+import mongoose from 'mongoose'
 import Patient from "../models/patient.js";
 import Odontogram from "../models/odontogram.js";
 import Evolution from "../models/evolution.js";
-import teeth from '../lib/odontogram.js'
 
 const DEFAULT_PAGE_SIZE = 20
 const MAX_PAGE_SIZE = 100
@@ -114,29 +114,51 @@ export const getAllPatients = async (req: Request, res: Response): Promise<void>
 
 export const createPatient = async (req: Request, res: Response): Promise<any> => {
     try {
-        const userId = req.user._id
         const { firstName, lastName } = req.body
         if (!firstName || !lastName) {
             return res.status(400).json({ message: 'First name and last name are required' })
         }
-        const newPatient = new Patient({ ...req.body, doctor: userId })
-        const newOdontogram = new Odontogram({
-            teeth,
-            patient: newPatient._id,
-            problemas: Array(4).fill(''),
-            tejidosBlandos: Array(14).fill(null)
-        })
-        const newEvolution = new Evolution({
-            patient: newPatient._id
-        })
-        newEvolution.update.push({ body: 'Paciente creado' })
 
-        await newPatient.save()
-        await newOdontogram.save()
-        await newEvolution.save()
+        const fields: Record<string, unknown> = {}
+        for (const key of EDITABLE_PATIENT_FIELDS) {
+            if (Object.prototype.hasOwnProperty.call(req.body, key)) {
+                fields[key] = req.body[key]
+            }
+        }
+
+        const session = await mongoose.startSession()
+        let newPatient
+        try {
+            await session.withTransaction(async () => {
+                const created = await Patient.create(
+                    [{ ...fields, doctor: req.user._id }],
+                    { session }
+                )
+                const patient = created[0]
+                if (!patient) {
+                    throw new Error('Patient create returned no document')
+                }
+                await Odontogram.createForPatient(patient._id, session)
+                await Evolution.createForPatient(patient._id, session)
+                newPatient = patient
+            })
+        } finally {
+            await session.endSession()
+        }
+
+        if (!newPatient) {
+            return res.status(500).json({ message: 'Internal server error trying to createPatient' })
+        }
         return res.status(201).json(newPatient)
     } catch (error) {
         console.error('Error in createPatient controller: ', error)
+        const code =
+            error && typeof error === 'object' && 'code' in error
+                ? (error as { code?: unknown }).code
+                : undefined
+        if (code === 11000) {
+            return res.status(409).json({ message: 'Duplicate key conflict' })
+        }
         return res.status(500).json({ message: 'Internal server error trying to createPatient' })
     }
 }
@@ -168,7 +190,26 @@ export const deletePatient = async (req: Request, res: Response): Promise<any> =
         if (!id) {
             return res.status(400).json({ message: 'No ID retrieved' })
         }
-        await Patient.findByIdAndDelete(id);
+
+        const session = await mongoose.startSession()
+        let deleted = false
+        try {
+            await session.withTransaction(async () => {
+                const patient = await Patient.findOneAndDelete({ _id: id }, { session })
+                if (!patient) {
+                    return
+                }
+                await Odontogram.deleteMany({ patient: id }, { session })
+                await Evolution.deleteMany({ patient: id }, { session })
+                deleted = true
+            })
+        } finally {
+            await session.endSession()
+        }
+
+        if (!deleted) {
+            return res.status(404).json({ message: 'Patient not found' })
+        }
         return res.status(200).json({ message: 'Patient has been deleted' })
     } catch (error) {
         console.error('Error in deletePatient controller: ', error)

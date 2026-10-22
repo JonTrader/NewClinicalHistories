@@ -61,8 +61,12 @@ OdontogramSchema.statics.createForPatient = async function (
         tejidosBlandos: Array(14).fill(null),
     }
     if (session) {
-        const [created] = await this.create([doc], { session })
-        return created
+        const created = await this.create([doc], { session })
+        const odontogram = created[0]
+        if (!odontogram) {
+            throw new Error('Odontogram create returned no document')
+        }
+        return odontogram
     }
     return this.create(doc)
 }
