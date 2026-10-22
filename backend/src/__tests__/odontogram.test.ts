@@ -12,7 +12,7 @@ import { resetExternalMocks } from './helpers/mocks.js'
  * Current odontogram controller / isDoctor behavior (do not change product code for these):
  * - Routes: GET/PUT /api/v1/odontograms/:id where :id is the patient id
  * - GET: Odontogram.find({ patient: id }) -> 200 array (even when one or zero docs)
- * - PUT: finds by patient; updates with { ...req.body }; 400 "No odontogram found" if missing
+ * - PUT: finds by patient; allowlists teeth/problemas/tejidosBlandos; 400 if none or missing odontogram
  * - Authz via protectRoute + isDoctor: 401 no auth; 403 foreign patient; 404 missing patient
  */
 
@@ -147,6 +147,25 @@ describe('Odontogram API', () => {
             expect(after!.problemas).toEqual(['Caries'])
             expect(after!.teeth[0]?.description).toBe('Caries oclusal')
             expect(after!.teeth[0]?.center).toBe('Red')
+        })
+
+        it('does not reassign patient via PUT body', async () => {
+            const { agent } = await registerDoctor(app, 'odo-put-mass')
+            const patient = await createPatient(agent)
+            const otherPatientId = new mongoose.Types.ObjectId().toString()
+
+            const res = await agent.put(`/api/v1/odontograms/${patient._id}`).send({
+                patient: otherPatientId,
+                problemas: ['Caries'],
+            })
+            expect(res.status).toBe(200)
+            expect(res.body.problemas).toEqual(['Caries'])
+            expect(String(res.body.patient)).toBe(String(patient._id))
+
+            const after = await Odontogram.findOne({ patient: patient._id }).lean()
+            expect(after).not.toBeNull()
+            expect(String(after!.patient)).toBe(String(patient._id))
+            expect(after!.problemas).toEqual(['Caries'])
         })
     })
 })
