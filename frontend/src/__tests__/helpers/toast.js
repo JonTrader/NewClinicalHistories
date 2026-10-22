@@ -6,14 +6,14 @@ import { vi } from 'vitest'
  * `vi.mock` is hoisted - use `vi.hoisted` in the test file:
  *
  * @example
- * import { createToastMock } from './helpers/toast.js'
+ * // Do not call createToastMock() inside vi.hoisted via a static import - ESM TDZ.
+ * const mocks = vi.hoisted(() => ({ toast: null }))
  *
- * const toast = vi.hoisted(() => createToastMock())
- *
- * vi.mock('react-hot-toast', () => ({
- *   default: toast,
- *   Toaster: () => null,
- * }))
+ * vi.mock('react-hot-toast', async () => {
+ *   const { createToastMock } = await import('./helpers/toast.js')
+ *   mocks.toast = createToastMock()
+ *   return { default: mocks.toast, Toaster: () => null }
+ * })
  */
 export function createToastMock() {
   const toast = {

@@ -10,18 +10,25 @@ import { vi } from 'vitest'
  * test file, then point the mock at the shared `ax` instance:
  *
  * @example
- * // From `frontend/src/__tests__/AuthStore.test.js` (adjust relative path as needed):
- * import { createAxiosMock } from './helpers/axios.js'
+ * // From `frontend/src/__tests__/AuthStore.test.js` (adjust paths as needed).
+ * // Do not call createAxiosMock() inside vi.hoisted via a static import - ESM TDZ.
+ * const mocks = vi.hoisted(() => ({
+ *   ax: null,
+ *   getResponseRejectHandler: null,
+ *   resetAxiosMock: null,
+ * }))
  *
- * const { ax, getResponseRejectHandler, resetAxiosMock } = vi.hoisted(() =>
- *   createAxiosMock()
- * )
+ * vi.mock('../lib/axios.js', async () => {
+ *   const { createAxiosMock } = await import('./helpers/axios.js')
+ *   const created = createAxiosMock()
+ *   mocks.ax = created.ax
+ *   mocks.getResponseRejectHandler = created.getResponseRejectHandler
+ *   mocks.resetAxiosMock = created.resetAxiosMock
+ *   return { ax: created.ax }
+ * })
  *
- * vi.mock('../lib/axios.js', () => ({ ax }))
- * // or from a nested folder: vi.mock('../../lib/axios.js', () => ({ ax }))
- *
- * // After importing AuthStore (so the interceptor is registered):
- * // await getResponseRejectHandler()(error)
+ * // Import AuthStore after the mock so the interceptor registers on mocks.ax:
+ * // await mocks.getResponseRejectHandler()(error)
  */
 export function createAxiosMock() {
   const state = { responseRejectHandler: null }
