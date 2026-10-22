@@ -127,11 +127,12 @@ describe('Odontogram API', () => {
             const before = await Odontogram.findOne({ patient: patient._id }).lean()
             expect(before).not.toBeNull()
             const teeth = structuredClone(before!.teeth)
-            teeth[0] = {
-                ...teeth[0],
-                description: 'Caries oclusal',
-                center: 'Red',
+            const firstTooth = teeth[0]
+            if (!firstTooth) {
+                throw new Error('expected odontogram to have at least one tooth')
             }
+            firstTooth.description = 'Caries oclusal'
+            firstTooth.center = 'Red'
 
             const res = await agent.put(`/api/v1/odontograms/${patient._id}`).send({
                 teeth,
@@ -147,6 +148,19 @@ describe('Odontogram API', () => {
             expect(after!.problemas).toEqual(['Caries'])
             expect(after!.teeth[0]?.description).toBe('Caries oclusal')
             expect(after!.teeth[0]?.center).toBe('Red')
+        })
+
+        it('returns 400 when body has no allowlisted fields', async () => {
+            const { agent } = await registerDoctor(app, 'odo-put-empty')
+            const patient = await createPatient(agent)
+            const otherPatientId = new mongoose.Types.ObjectId().toString()
+
+            const res = await agent.put(`/api/v1/odontograms/${patient._id}`).send({
+                patient: otherPatientId,
+                foo: 1,
+            })
+            expect(res.status).toBe(400)
+            expect(res.body).toEqual({ message: 'No valid fields to update' })
         })
 
         it('does not reassign patient via PUT body', async () => {
