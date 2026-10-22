@@ -31,6 +31,9 @@ export const protectRoute = async (req: Request, res: Response, next: NextFuncti
         next()
     } catch (error) {
         console.error('Error in protectRoute middleware: ', error)
+        if (error instanceof jwt.JsonWebTokenError || error instanceof jwt.TokenExpiredError) {
+            return res.status(401).json({ message: 'Unauthorized, invalid token' })
+        }
         return res.status(500).json({ message: 'Internal Server Error' })
     }
 }
@@ -48,6 +51,9 @@ export const isDoctor = async (req: Request, res: Response, next: NextFunction) 
         next()
     } catch (error) {
         console.error('Error in isDoctor middleware: ', error)
-        return res.status(500).json({message: 'Internal Server Error'})
+        if (error instanceof Error && error.name === 'CastError') {
+            return res.status(404).json({ message: 'Id or Patient not found' })
+        }
+        return res.status(500).json({ message: 'Internal Server Error' })
     }
 }

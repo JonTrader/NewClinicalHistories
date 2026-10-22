@@ -17,9 +17,9 @@ import { resetExternalMocks } from './helpers/mocks.js'
  * - GET list: scoped to caller's patients; default limit 20; limit capped at 100
  * - GET search: 400 if q missing/empty; 400 if q > 100 chars; own patients only; numeric q matches idNumber
  * - isDoctor on get/update/delete: 403 foreign patient; 404 missing id / patient not found
- * - isDoctor: invalid ObjectId currently -> 500 "Internal Server Error" (CastError into catch)
+ * - isDoctor: invalid ObjectId -> 404 "Id or Patient not found"
  * - DELETE: removes patient; post findOneAndDelete hook cascades Odontogram + Evolution
- * - PUT mass-assignment: currently allows transferring doctor via body.doctor (findByIdAndUpdate spreads req.body)
+ * - PUT: body.doctor is ignored; ownership stays with the original doctor
  */
 
 let app: Express
@@ -265,13 +265,13 @@ describe('Patients API', () => {
             expect(delRes.body).toEqual({ message: 'Id or Patient not found' })
         })
 
-        it('returns 500 for invalid ObjectId (current CastError handling)', async () => {
+        it('returns 404 for invalid ObjectId', async () => {
             const { agent } = await registerDoctor(app, 'authz-invalid')
             const invalidId = 'not-a-valid-objectid'
 
             const getRes = await agent.get(`/api/v1/patients/${invalidId}`)
-            expect(getRes.status).toBe(500)
-            expect(getRes.body).toEqual({ message: 'Internal Server Error' })
+            expect(getRes.status).toBe(404)
+            expect(getRes.body).toEqual({ message: 'Id or Patient not found' })
         })
     })
 
@@ -301,12 +301,7 @@ describe('Patients API', () => {
     })
 
     describe('PUT /api/v1/patients/:id mass-assignment / ownership transfer', () => {
-        /**
-         * Documents CURRENT behavior: editPatient spreads req.body into findByIdAndUpdate,
-         * so a doctor who already owns the patient can change the doctor field to another user.
-         * A future fix should reject or strip body.doctor; flip this expectation then.
-         */
-        it('currently allows transferring doctor via body.doctor', async () => {
+        it('does not transfer ownership when body includes doctor', async () => {
             const doctorA = await registerDoctor(app, 'mass-a')
             const doctorB = await registerDoctor(app, 'mass-b')
 
@@ -319,22 +314,24 @@ describe('Patients API', () => {
 
             const updateRes = await doctorA.agent.put(`/api/v1/patients/${patientId}`).send({
                 doctor: doctorB.user._id,
-                firstName: 'Transfer',
+                firstName: 'Renamed',
                 lastName: 'Me',
                 medicalHistoryQuestions: ['No refiere'],
                 dentalHistoryQuestions: ['No refiere'],
             })
 
             expect(updateRes.status).toBe(200)
-            expect(String(updateRes.body.doctor)).toBe(String(doctorB.user._id))
+            expect(String(updateRes.body.doctor)).toBe(String(doctorA.user._id))
+            expect(updateRes.body.firstName).toBe('Renamed')
 
-            // Original owner can no longer access after transfer
             const getAsA = await doctorA.agent.get(`/api/v1/patients/${patientId}`)
-            expect(getAsA.status).toBe(403)
+            expect(getAsA.status).toBe(200)
+            expect(String(getAsA.body.doctor)).toBe(String(doctorA.user._id))
+            expect(getAsA.body.firstName).toBe('Renamed')
 
             const getAsB = await doctorB.agent.get(`/api/v1/patients/${patientId}`)
-            expect(getAsB.status).toBe(200)
-            expect(String(getAsB.body.doctor)).toBe(String(doctorB.user._id))
+            expect(getAsB.status).toBe(403)
+            expect(getAsB.body).toEqual({ message: 'Forbidden. Not authorized' })
         })
     })
 })

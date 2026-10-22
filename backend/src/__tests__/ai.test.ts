@@ -12,8 +12,9 @@ import { generateContentMock, resetExternalMocks } from './helpers/mocks.js'
  * Current AI controller behavior (do not change product code for these):
  * - POST /api/v1/ai/summary/:id - protectRoute + isDoctor; body { text }
  *   - 400 "No text provided"; 404 "Evolution not found"
- *   - Intended 403 when summary.dateOfLastEvolution === last note createdAt, but CURRENTLY ineffective:
- *     Date objects from Mongo are distinct instances, so === never matches after reload; second summary is 200
+ *   - 403 "Not allowed to generate a new summary" when dateOfLastEvolution matches last note
+ *     (compared via getTime(), not Date ===)
+ *   - After a new evolution note, summary is allowed again (200)
  *   - 200 returns mocked Gemini text string; persists summary on evolution
  * - POST /api/v1/ai/evolution - protectRoute only (no isDoctor, no patient id); body { body: keywords }
  *   - 401 without auth; 400 "No text provided" without body; 200 mocked text string
@@ -114,14 +115,7 @@ describe('AI API', () => {
             )
         })
 
-        /**
-         * Documents CURRENT behavior: generateSummary compares dates with ===.
-         * After save + findOne reload, summary.dateOfLastEvolution and lastUpdate.createdAt are
-         * distinct Date instances with equal getTime(), so === is false and a second summary
-         * without a new note still returns 200. A future fix should compare getTime() (or similar);
-         * flip this expectation to 403 then.
-         */
-        it('currently allows regenerating summary without a new note (Date === check)', async () => {
+        it('returns 403 when regenerating summary without a new note', async () => {
             const { agent } = await registerDoctor(app, 'ai-sum-again')
             const patient = await createPatient(agent)
 
@@ -130,12 +124,41 @@ describe('AI API', () => {
                 .send({ text: 'Paciente creado - resumen' })
             expect(first.status).toBe(200)
             expect(first.body).toBe('Mock AI summary')
+            expect(generateContentMock).toHaveBeenCalledTimes(1)
 
             const second = await agent
                 .post(`/api/v1/ai/summary/${patient._id}`)
                 .send({ text: 'Segundo intento sin nueva nota' })
-            expect(second.status).toBe(200)
-            expect(second.body).toBe('Mock AI summary')
+            expect(second.status).toBe(403)
+            expect(second.body).toEqual({ message: 'Not allowed to generate a new summary' })
+            expect(generateContentMock).toHaveBeenCalledTimes(1)
+        })
+
+        it('allows a new summary after appending an evolution note', async () => {
+            const { agent } = await registerDoctor(app, 'ai-sum-new-note')
+            const patient = await createPatient(agent)
+
+            const first = await agent
+                .post(`/api/v1/ai/summary/${patient._id}`)
+                .send({ text: 'Paciente creado - resumen' })
+            expect(first.status).toBe(200)
+            expect(generateContentMock).toHaveBeenCalledTimes(1)
+
+            const blocked = await agent
+                .post(`/api/v1/ai/summary/${patient._id}`)
+                .send({ text: 'Sin nueva nota' })
+            expect(blocked.status).toBe(403)
+
+            const noteRes = await agent
+                .put(`/api/v1/evolutions/${patient._id}`)
+                .send({ body: 'Control post operatorio' })
+            expect(noteRes.status).toBe(200)
+
+            const afterNote = await agent
+                .post(`/api/v1/ai/summary/${patient._id}`)
+                .send({ text: 'Resumen con nueva nota' })
+            expect(afterNote.status).toBe(200)
+            expect(afterNote.body).toBe('Mock AI summary')
             expect(generateContentMock).toHaveBeenCalledTimes(2)
         })
     })

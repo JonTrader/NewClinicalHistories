@@ -91,6 +91,7 @@ export const login = async (req: Request, res: Response):Promise<any> => {
         })
     } catch (error) {
         console.error('Error in login controller: ', error)
+        return res.status(500).json({ message: 'Internal server error' })
     }
 }
 

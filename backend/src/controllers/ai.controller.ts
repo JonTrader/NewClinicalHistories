@@ -25,7 +25,13 @@ export const generateSummary = async (req: Request, res: Response): Promise<any>
         }
 
         const lastUpdate = evolution.update[evolution.update.length - 1]
-        if (evolution.summary && evolution.summary?.dateOfLastEvolution === lastUpdate!.createdAt) {
+        const summaryDate = evolution.summary?.dateOfLastEvolution
+        const lastUpdateDate = lastUpdate?.createdAt
+        if (
+            summaryDate &&
+            lastUpdateDate &&
+            new Date(summaryDate).getTime() === new Date(lastUpdateDate).getTime()
+        ) {
             return res.status(403).json({ message: 'Not allowed to generate a new summary' })
         }
 

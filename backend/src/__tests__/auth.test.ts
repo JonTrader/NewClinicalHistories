@@ -18,7 +18,8 @@ import { sendWelcomeEmailMock, resetExternalMocks } from './helpers/mocks.js'
  * - Logout does not require auth; clears jwt cookie (maxAge 0)
  * - protectRoute: no cookie -> 401 "Unauthorized, no token"
  * - protectRoute: user deleted -> 401 "User not found"
- * - protectRoute: invalid JWT -> 500 "Internal Server Error" (jwt.verify throws into catch)
+ * - protectRoute: invalid JWT -> 401 "Unauthorized, invalid token"
+ * - Login catch (unexpected errors) -> 500 JSON (not covered by a dedicated test; hard to force without flaking)
  */
 
 let app: Express
@@ -267,13 +268,13 @@ describe('Auth API', () => {
             expect(res.body).toEqual({ message: 'User not found' })
         })
 
-        it('returns 500 for an invalid jwt cookie (current protectRoute catch behavior)', async () => {
+        it('returns 401 for an invalid jwt cookie', async () => {
             const res = await request(app)
                 .get('/api/v1/auth/check')
                 .set('Cookie', ['jwt=not-a-valid-jwt'])
 
-            expect(res.status).toBe(500)
-            expect(res.body).toEqual({ message: 'Internal Server Error' })
+            expect(res.status).toBe(401)
+            expect(res.body).toEqual({ message: 'Unauthorized, invalid token' })
         })
     })
 
