@@ -8,7 +8,7 @@
 - Helpers under `backend/src/__tests__/helpers/`:
   - `env.ts` - dummy env vars before app import
   - `mocks.ts` - Arcjet middleware always `next()`, Resend, Cloudinary, `@google/genai`. Exported spies: `sendWelcomeEmailMock`, `cloudinaryUploadMock`, `generateContentMock`, plus `resetExternalMocks()`.
-  - `mongodb.ts` - `mongodb-memory-server` via `connectTestDB` / `clearTestDB` / `disconnectTestDB`. Do **not** use `connectDB()` in tests; it `process.exit(1)` on failure.
+  - `mongodb.ts` - `MongoMemoryReplSet` (single-node) via `connectTestDB` / `clearTestDB` / `disconnectTestDB`. Multi-document transactions require a replica set; production Atlas is already one. Do **not** use `connectDB()` in tests; it `process.exit(1)` on failure.
   - `auth.ts` - `registerAndLogin` / `loginAs` Supertest agents that keep the `jwt` cookie
 - Health test does not need Mongo; API integration tests should use the Mongo helpers and unique emails per test when clearing between cases.
 - Gemini mock must return `candidates[0].content.parts[0].text` to match `ai.controller.ts`.

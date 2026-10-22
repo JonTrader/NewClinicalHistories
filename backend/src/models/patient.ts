@@ -1,6 +1,4 @@
 import mongoose, { Document } from 'mongoose'
-import Odontogram from './odontogram.js'
-import Evolution from './evolution.js'
 
 export interface IPatient extends Document {
     firstName: string,
@@ -69,17 +67,6 @@ const PatientSchema = new mongoose.Schema<IPatient>({
 PatientSchema.index({ doctor: 1, firstName: 1 })
 PatientSchema.index({ doctor: 1, lastName: 1 })
 PatientSchema.index({ doctor: 1, idNumber: 1 })
-
-PatientSchema.post('findOneAndDelete', async function (doc) {
-    if (doc) {
-        await Odontogram.deleteOne({
-            patient: doc._id
-        })
-        await Evolution.deleteOne({
-            patient: doc._id
-        })
-    }
-})
 
 const Patient = mongoose.model<IPatient>('Patient', PatientSchema)
 

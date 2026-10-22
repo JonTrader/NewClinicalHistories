@@ -18,7 +18,7 @@ import { resetExternalMocks } from './helpers/mocks.js'
  * - GET search: 400 if q missing/empty; 400 if q > 100 chars; own patients only; numeric q matches idNumber
  * - isDoctor on get/update/delete: 403 foreign patient; 404 missing id / patient not found
  * - isDoctor: invalid ObjectId -> 404 "Id or Patient not found"
- * - DELETE: removes patient; post findOneAndDelete hook cascades Odontogram + Evolution
+ * - DELETE: removes patient; controller transaction cascades Odontogram + Evolution
  * - PUT: body.doctor is ignored; ownership stays with the original doctor
  */
 
@@ -97,6 +97,23 @@ describe('Patients API', () => {
             expect(evolution).not.toBeNull()
             expect(evolution!.update).toHaveLength(1)
             expect(evolution!.update[0]?.body).toBe('Paciente creado')
+        })
+
+        it('ignores non-allowlisted body fields on create', async () => {
+            const { agent, user } = await registerDoctor(app, 'create-strip')
+            const history = ['Hipertension', 'Alergia a penicilina']
+
+            const res = await agent.post('/api/v1/patients').send(
+                minimalPatientBody({
+                    role: 'admin',
+                    medicalHistoryQuestions: history,
+                })
+            )
+
+            expect(res.status).toBe(201)
+            expect(res.body).not.toHaveProperty('role')
+            expect(res.body.medicalHistoryQuestions).toEqual(history)
+            expect(String(res.body.doctor)).toBe(String(user._id))
         })
     })
 
@@ -297,6 +314,23 @@ describe('Patients API', () => {
 
             expect(await Odontogram.findOne({ patient: patientId })).toBeNull()
             expect(await Evolution.findOne({ patient: patientId })).toBeNull()
+        })
+
+        it('returns 404 when patient was already deleted', async () => {
+            const { agent } = await registerDoctor(app, 'delete-gone')
+
+            const created = await agent
+                .post('/api/v1/patients')
+                .send(minimalPatientBody({ firstName: 'Gone', lastName: 'Already' }))
+            expect(created.status).toBe(201)
+            const patientId = created.body._id
+
+            const first = await agent.delete(`/api/v1/patients/${patientId}`)
+            expect(first.status).toBe(200)
+
+            const second = await agent.delete(`/api/v1/patients/${patientId}`)
+            expect(second.status).toBe(404)
+            expect(second.body).toEqual({ message: 'Id or Patient not found' })
         })
     })
 
